@@ -14,36 +14,16 @@
 
 <style>
 
-/* =========================================================
-   FIREGUARD — LIVE WILDFIRE INTELLIGENCE
-   No API key required in the HTML.
-
-   LIVE SOURCES:
-   - NASA GIBS / VIIRS thermal anomaly layer
-   - Open-Meteo current weather
-   - Open-Meteo elevation
-
-   IMPORTANT:
-   - Red fire layer = satellite thermal anomalies.
-   - Green/orange/transparent-red cells = estimated
-     environmental fire-risk score, NOT confirmed fire.
-========================================================= */
-
 :root{
     --bg:#05070c;
     --panel:#0b1019;
-    --panel2:#0e1520;
     --border:#27344a;
-
     --text:#eef4ff;
     --muted:#8794aa;
-
     --green:#31db77;
     --orange:#ff8a21;
     --red:#ff3b30;
-    --yellow:#ffd400;
     --cyan:#20d9ff;
-    --white:#ffffff;
 }
 
 *{
@@ -53,7 +33,6 @@
 body{
     margin:0;
     min-height:100vh;
-
     background:
         radial-gradient(
             circle at 20% 0%,
@@ -61,44 +40,26 @@ body{
             transparent 36%
         ),
         var(--bg);
-
     color:var(--text);
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 
-/* =========================================================
-   HEADER
-========================================================= */
+/* ================= HEADER ================= */
 
 header{
     height:68px;
-
-    padding:
-        0 24px;
-
+    padding:0 24px;
     display:flex;
-
     align-items:center;
-
     justify-content:space-between;
-
     background:#080c13;
-
-    border-bottom:
-        1px solid
-        var(--border);
+    border-bottom:1px solid var(--border);
 }
 
 .brand{
     font-size:24px;
-
     font-weight:900;
-
     letter-spacing:3px;
 }
 
@@ -108,63 +69,36 @@ header{
 
 .live-pill{
     color:var(--green);
-
-    border:
-        1px solid
-        rgba(49,219,119,.35);
-
-    background:
-        rgba(20,80,45,.18);
-
-    padding:
-        7px 12px;
-
-    border-radius:
-        999px;
-
+    border:1px solid rgba(49,219,119,.35);
+    background:rgba(20,80,45,.18);
+    padding:7px 12px;
+    border-radius:999px;
     font-size:10px;
 }
 
 
-/* =========================================================
-   MAIN
-========================================================= */
+/* ================= MAIN ================= */
 
 .wrapper{
     width:min(1500px,96vw);
-
     margin:auto;
-
-    padding:
-        18px
-        0
-        30px;
+    padding:18px 0 30px;
 }
 
 .title{
     margin:0;
-
     font-size:27px;
 }
 
 .subtitle{
-    margin:
-        5px 0
-        16px;
-
+    margin:5px 0 16px;
     color:var(--muted);
-
     font-size:11px;
 }
 
 .layout{
     display:grid;
-
-    grid-template-columns:
-        275px
-        minmax(0,1fr)
-        305px;
-
+    grid-template-columns:275px minmax(0,1fr) 305px;
     gap:14px;
 }
 
@@ -177,11 +111,7 @@ header{
             var(--panel),
             #080d15
         );
-
-    border:
-        1px solid
-        var(--border);
-
+    border:1px solid var(--border);
     border-radius:10px;
 }
 
@@ -189,99 +119,41 @@ header{
     padding:14px;
 }
 
-
-/* =========================================================
-   HEADINGS
-========================================================= */
-
 h2{
-    margin:
-        0 0
-        12px;
-
+    margin:0 0 12px;
     font-size:12px;
-
     letter-spacing:1px;
 }
 
 
-/* =========================================================
-   CONTROLS
-========================================================= */
-
-label{
-    display:block;
-
-    color:var(--muted);
-
-    margin:
-        11px 0
-        5px;
-
-    font-size:9px;
-}
-
-select,
-input{
-    width:100%;
-
-    padding:
-        9px 10px;
-
-    background:#070a11;
-
-    color:var(--text);
-
-    border:
-        1px solid
-        #35415a;
-
-    border-radius:6px;
-
-    font-size:10px;
-}
+/* ================= CONTROLS ================= */
 
 button{
     width:100%;
-
     margin-top:10px;
-
     padding:10px;
-
     border-radius:7px;
-
     cursor:pointer;
-
     font-size:10px;
-
     font-weight:800;
 }
 
 .primary{
     background:var(--red);
-
     color:white;
-
     border:0;
 }
 
 .secondary{
     background:#141c2b;
-
     color:white;
-
-    border:
-        1px solid
-        #3a4861;
+    border:1px solid #3a4861;
 }
 
 .status{
     margin-top:9px;
-
     color:var(--muted);
-
     font-size:9px;
-
     line-height:1.5;
 }
 
@@ -295,117 +167,132 @@ button{
 
 .note{
     margin-top:11px;
-
     color:#727f97;
-
     font-size:8px;
-
     line-height:1.6;
 }
 
 
-/* =========================================================
-   MAP
-========================================================= */
+/* ================= MAP ================= */
 
 .map-panel{
     padding:10px;
 }
 
-#map{
-    height:650px;
-
-    border-radius:8px;
-
-    overflow:hidden;
-}
-
 .map-toolbar{
     display:flex;
-
-    justify-content:space-between;
-
     align-items:center;
-
+    justify-content:space-between;
     margin-bottom:8px;
 }
 
 .map-title{
     font-size:11px;
-
     font-weight:800;
 }
 
 .map-refresh{
     color:var(--muted);
-
     font-size:8px;
+}
+
+#map{
+    height:650px;
+    border-radius:8px;
+    overflow:hidden;
 }
 
 .legend{
     display:flex;
-
     flex-wrap:wrap;
-
     gap:11px;
-
     margin-top:9px;
-
     color:var(--muted);
-
     font-size:8px;
 }
 
 .legend-item{
     display:flex;
-
     align-items:center;
-
     gap:5px;
 }
 
 .legend-color{
     width:10px;
     height:10px;
-
     border-radius:50%;
 }
 
-.legend-color.actual{
+.actual{
     background:#ff2d20;
 }
 
-.legend-color.high{
+.high{
     background:rgba(255,59,48,.55);
 }
 
-.legend-color.orange{
+.orange{
     background:rgba(255,138,33,.65);
 }
 
-.legend-color.green{
+.green{
     background:rgba(49,219,119,.42);
 }
 
 
-/* =========================================================
-   RIGHT PANEL
-========================================================= */
+/* ================= RIGHT PANEL ================= */
+
+.location-card{
+    margin-top:11px;
+    padding:10px;
+    background:#080d15;
+    border:1px solid #29364c;
+    border-radius:7px;
+}
+
+.location-title{
+    font-size:10px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.coordinates{
+    color:var(--muted);
+    font-size:8px;
+    margin-bottom:8px;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.info{
+    padding:8px;
+    background:#0b111a;
+    border:1px solid #202c40;
+    border-radius:5px;
+}
+
+.info small{
+    display:block;
+    color:var(--muted);
+    font-size:7px;
+}
+
+.info strong{
+    display:block;
+    margin-top:4px;
+    font-size:15px;
+}
 
 .data-row{
     display:flex;
-
     justify-content:space-between;
-
     gap:8px;
-
-    padding:
-        8px 0;
-
-    border-bottom:
-        1px solid
-        #202a3c;
-
+    padding:8px 0;
+    border-bottom:1px solid #202a3c;
     font-size:9px;
 }
 
@@ -417,7 +304,7 @@ button{
     color:var(--green);
 }
 
-.actual{
+.actual-text{
     color:var(--red);
 }
 
@@ -426,214 +313,109 @@ button{
 }
 
 
-/* =========================================================
-   SELECTED LOCATION
-========================================================= */
-
-.location-card{
-    margin-top:11px;
-
-    padding:10px;
-
-    background:#080d15;
-
-    border:
-        1px solid
-        #29364c;
-
-    border-radius:7px;
-}
-
-.location-title{
-    font-size:10px;
-
-    font-weight:800;
-
-    margin-bottom:7px;
-}
-
-.coordinates{
-    color:var(--muted);
-
-    font-size:8px;
-
-    margin-bottom:8px;
-}
-
-.info-grid{
-    display:grid;
-
-    grid-template-columns:
-        1fr
-        1fr;
-
-    gap:7px;
-}
-
-.info{
-    padding:8px;
-
-    background:#0b111a;
-
-    border:
-        1px solid
-        #202c40;
-
-    border-radius:5px;
-}
-
-.info small{
-    display:block;
-
-    color:var(--muted);
-
-    font-size:7px;
-}
-
-.info strong{
-    display:block;
-
-    margin-top:4px;
-
-    font-size:15px;
-}
-
-
-/* =========================================================
-   RISK CARD
-========================================================= */
+/* ================= RISK ================= */
 
 .risk-card{
     margin-top:11px;
-
     padding:11px;
-
     border-radius:7px;
-
     background:
         linear-gradient(
             135deg,
             rgba(255,59,48,.08),
             rgba(255,138,33,.04)
         );
-
-    border:
-        1px solid
-        #363144;
+    border:1px solid #363144;
 }
 
 .risk-head{
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
 }
 
 .risk-label{
     font-size:10px;
-
     font-weight:800;
 }
 
 .risk-score{
     font-size:22px;
-
     font-weight:900;
 }
 
 .risk-bar{
     margin-top:8px;
-
     height:7px;
-
     background:#202a3b;
-
     border-radius:999px;
-
     overflow:hidden;
 }
 
 .risk-fill{
     height:100%;
-
     width:0%;
+    transition:width .35s ease;
+}
 
-    transition:
-        width .35s ease;
+.risk-description{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:8px;
+    line-height:1.55;
 }
 
 
-/* =========================================================
-   FIRE DETECTION CARD
-========================================================= */
+/* ================= FIRE STATUS ================= */
 
 .fire-card{
     margin-top:11px;
-
     padding:11px;
-
     border-radius:7px;
-
-    background:
-        rgba(255,59,48,.07);
-
-    border:
-        1px solid
-        rgba(255,59,48,.28);
+    background:rgba(255,59,48,.07);
+    border:1px solid rgba(255,59,48,.28);
 }
 
 .fire-title{
     color:var(--red);
-
     font-size:10px;
-
     font-weight:900;
 }
 
 .fire-description{
     margin-top:5px;
-
     color:var(--muted);
-
     font-size:8px;
-
     line-height:1.55;
 }
 
 
-/* =========================================================
-   POPUP
-========================================================= */
+/* ================= POPUP ================= */
 
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip{
     background:#111827;
-
     color:#edf3ff;
 }
 
 .leaflet-popup-content{
     font-size:9px;
-
     line-height:1.55;
 }
 
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+/* ================= RESPONSIVE ================= */
 
 @media(max-width:1120px){
 
     .layout{
-        grid-template-columns:
-            1fr;
+        grid-template-columns:1fr;
     }
 
     #map{
         height:500px;
     }
+
 }
 
 </style>
@@ -663,16 +445,14 @@ button{
     </h1>
 
     <div class="subtitle">
-        PS-01 • Actual satellite fire detections + live weather + terrain-based environmental risk
+        PS-01 • Live satellite fire visualization + current weather + terrain + environmental fire-risk analysis
     </div>
 
 
     <div class="layout">
 
 
-        <!-- =================================================
-             LEFT
-        ================================================== -->
+        <!-- ================= LEFT ================= -->
 
         <aside class="panel">
 
@@ -681,32 +461,11 @@ button{
             </h2>
 
 
-            <label>
-                Risk Overlay Resolution
-            </label>
-
-            <select id="gridResolution">
-
-                <option value="10">
-                    Global — 10° grid
-                </option>
-
-                <option value="7">
-                    Global — 7° grid
-                </option>
-
-                <option value="5">
-                    Regional-style — 5° grid
-                </option>
-
-            </select>
-
-
             <button
                 class="primary"
-                id="loadRiskBtn"
+                id="loadMapBtn"
             >
-                UPDATE LIVE MAP
+                UPDATE LIVE FIRE MAP
             </button>
 
 
@@ -730,26 +489,26 @@ button{
                 class="status"
                 id="status"
             >
-                Initializing live layers...
+                Loading live layers...
             </div>
 
 
             <div class="note">
 
-                Red fire marks come from NASA's satellite
-                thermal-anomaly layer.
+                Red areas on the map represent satellite
+                thermal anomalies.
 
                 <br><br>
 
-                Green / orange / transparent-red regions
-                represent an environmental fire-risk estimate
-                from current weather.
+                Green, orange and transparent-red areas
+                represent environmental fire-risk estimates
+                calculated from current weather.
 
                 <br><br>
 
-                The risk estimate is NOT a probability of fire
-                and should not be interpreted as a confirmed
-                wildfire prediction.
+                Click anywhere on the map to see the exact
+                current temperature, wind, humidity,
+                precipitation and elevation at that location.
 
             </div>
 
@@ -762,10 +521,10 @@ button{
 
                 <div class="fire-description">
 
-                    NASA VIIRS thermal anomalies are displayed
-                    directly over the map.
+                    The fire layer is a live satellite
+                    thermal-anomaly visualization.
 
-                    No simulated fire icons are used.
+                    No simulated fire markers are added.
 
                 </div>
 
@@ -775,9 +534,7 @@ button{
 
 
 
-        <!-- =================================================
-             MAP
-        ================================================== -->
+        <!-- ================= MAP ================= -->
 
         <main>
 
@@ -786,7 +543,7 @@ button{
                 <div class="map-toolbar">
 
                     <div class="map-title">
-                        WORLDWIDE LIVE FIRE + RISK MAP
+                        LIVE FIRE + ENVIRONMENTAL RISK MAP
                     </div>
 
                     <div
@@ -810,7 +567,7 @@ button{
                             class="legend-color actual"
                         ></span>
 
-                        Actual satellite thermal anomaly
+                        Actual satellite fire/thermal anomaly
 
                     </div>
 
@@ -821,7 +578,7 @@ button{
                             class="legend-color high"
                         ></span>
 
-                        Very high environmental fire risk
+                        Very high environmental risk
 
                     </div>
 
@@ -832,7 +589,7 @@ button{
                             class="legend-color orange"
                         ></span>
 
-                        Hot / elevated environmental risk
+                        Hot / elevated risk
 
                     </div>
 
@@ -843,7 +600,7 @@ button{
                             class="legend-color green"
                         ></span>
 
-                        Lower environmental fire risk
+                        Lower environmental risk
 
                     </div>
 
@@ -855,12 +612,9 @@ button{
 
 
 
-        <!-- =================================================
-             RIGHT
-        ================================================== -->
+        <!-- ================= RIGHT ================= -->
 
         <aside class="panel">
-
 
             <h2>
                 SELECTED LOCATION
@@ -869,9 +623,7 @@ button{
 
             <div class="location-card">
 
-                <div
-                    class="location-title"
-                >
+                <div class="location-title">
                     CLICK ANYWHERE ON MAP
                 </div>
 
@@ -905,7 +657,7 @@ button{
                     <div class="info">
 
                         <small>
-                            WIND
+                            WIND SPEED
                         </small>
 
                         <strong
@@ -965,7 +717,7 @@ button{
                     <div class="info">
 
                         <small>
-                            RAIN
+                            PRECIPITATION
                         </small>
 
                         <strong
@@ -990,7 +742,7 @@ button{
                 <div class="risk-head">
 
                     <div class="risk-label">
-                        ESTIMATED FIRE RISK
+                        ENVIRONMENTAL FIRE RISK
                     </div>
 
                     <div
@@ -1014,11 +766,11 @@ button{
 
 
                 <div
-                    class="fire-description"
+                    class="risk-description"
                     id="riskDescription"
                 >
-                    Click a location to calculate its
-                    current environmental risk.
+                    Click on the map to calculate the
+                    current environmental fire risk.
                 </div>
 
             </div>
@@ -1041,8 +793,8 @@ button{
                     class="fire-description"
                     id="fireStatusText"
                 >
-                    Click a location on a visible
-                    thermal anomaly to inspect it.
+                    Click on a location to inspect its
+                    environmental conditions.
                 </div>
 
             </div>
@@ -1061,7 +813,7 @@ button{
                 </span>
 
                 <span
-                    class="data-value actual"
+                    class="data-value actual-text"
                 >
                     NASA VIIRS
                 </span>
@@ -1102,7 +854,7 @@ button{
             <div class="data-row">
 
                 <span>
-                    Fire risk
+                    Environmental risk
                 </span>
 
                 <span
@@ -1116,14 +868,10 @@ button{
 
             <div class="note">
 
-                "Actual fire" means a satellite thermal
-                anomaly detected by the NASA layer.
-
-                <br><br>
-
-                A satellite thermal anomaly is not the same
-                thing as a confirmed ignition point or
-                ground-truth fire perimeter.
+                A satellite thermal anomaly represents
+                an actual satellite-detected hotspot
+                signal; it is not automatically an exact
+                wildfire perimeter or ignition point.
 
             </div>
 
@@ -1144,7 +892,7 @@ button{
 <script>
 
 /* =========================================================
-   CONSTANTS
+   CONFIG
 ========================================================= */
 
 const NASA_GIBS_WMS =
@@ -1155,17 +903,15 @@ const DEFAULT_CENTER = [
     78.9629
 ];
 
-let map;
+let map = null;
 
 let selectedMarker = null;
 
 let riskLayers = [];
 
-let latestWeather = null;
-
 
 /* =========================================================
-   MAP
+   INITIALIZE MAP
 ========================================================= */
 
 function initMap(){
@@ -1179,31 +925,36 @@ function initMap(){
 
 
     /*
-        Base map.
+        OpenStreetMap base map.
     */
 
     L.tileLayer(
+
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
         {
             maxZoom:19,
 
             attribution:
                 "&copy; OpenStreetMap contributors"
         }
+
     ).addTo(map);
 
 
     /*
-        REAL NASA VIIRS FIRE LAYER.
+        REAL SATELLITE THERMAL ANOMALY LAYER.
 
-        No MAP_KEY is embedded.
-        This is the GIBS visualization layer.
+        No key or login is requested from the user.
     */
 
-    const nasaFireLayer =
+    const fireLayer =
         L.tileLayer.wms(
+
             NASA_GIBS_WMS,
+
             {
+
                 layers:
                     "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
 
@@ -1221,15 +972,17 @@ function initMap(){
 
                 attribution:
                     "NASA GIBS / VIIRS"
+
             }
+
         );
 
 
-    nasaFireLayer.addTo(map);
+    fireLayer.addTo(map);
 
 
     /*
-        Click the map.
+        Map click.
     */
 
     map.on(
@@ -1248,7 +1001,7 @@ function initMap(){
 
 
 /* =========================================================
-   MAP CLICK
+   CLICK LOCATION
 ========================================================= */
 
 async function handleMapClick(
@@ -1262,7 +1015,7 @@ async function handleMapClick(
     );
 
 
-    await loadSelectedWeather(
+    await loadWeather(
         lat,
         lon
     );
@@ -1290,11 +1043,14 @@ function updateSelectedMarker(
 
     selectedMarker =
         L.circleMarker(
+
             [
                 lat,
                 lon
             ],
+
             {
+
                 radius:7,
 
                 color:"#ffffff",
@@ -1304,13 +1060,16 @@ function updateSelectedMarker(
                 fillColor:"#20d9ff",
 
                 fillOpacity:.95
+
             }
-        )
-        .addTo(map);
+
+        ).addTo(map);
 
 
     document
-        .getElementById("coordinates")
+        .getElementById(
+            "coordinates"
+        )
         .textContent =
 
         "LAT " +
@@ -1322,10 +1081,13 @@ function updateSelectedMarker(
 
     selectedMarker
         .bindPopup(
+
             "<b>SELECTED LOCATION</b><br>" +
+
             lat.toFixed(4) +
             ", " +
             lon.toFixed(4)
+
         )
         .openPopup();
 
@@ -1333,16 +1095,16 @@ function updateSelectedMarker(
 
 
 /* =========================================================
-   LIVE WEATHER FOR CLICKED POINT
+   WEATHER + TERRAIN
 ========================================================= */
 
-async function loadSelectedWeather(
+async function loadWeather(
     lat,
     lon
 ){
 
     setStatus(
-        "Loading live weather and elevation..."
+        "Loading live weather and terrain..."
     );
 
 
@@ -1380,7 +1142,7 @@ async function loadSelectedWeather(
 
     try{
 
-        const response =
+        const responses =
             await Promise.all([
                 fetch(weatherURL),
                 fetch(elevationURL)
@@ -1388,23 +1150,23 @@ async function loadSelectedWeather(
 
 
         if(
-            !response[0].ok ||
-            !response[1].ok
+            !responses[0].ok ||
+            !responses[1].ok
         ){
 
             throw new Error(
-                "Live API request failed"
+                "API failure"
             );
 
         }
 
 
         const weather =
-            await response[0].json();
+            await responses[0].json();
 
 
-        const elevationData =
-            await response[1].json();
+        const terrain =
+            await responses[1].json();
 
 
         const current =
@@ -1443,45 +1205,41 @@ async function loadSelectedWeather(
 
         const elevation =
             Number(
-                elevationData.elevation[0]
+                terrain.elevation[0]
             );
 
 
-        latestWeather = {
-
-            temperature,
-            humidity,
-            wind,
-            direction,
-            precipitation,
-            elevation
-
-        };
-
-
         document
-            .getElementById("temperature")
+            .getElementById(
+                "temperature"
+            )
             .textContent =
             temperature.toFixed(1) +
             " °C";
 
 
         document
-            .getElementById("wind")
+            .getElementById(
+                "wind"
+            )
             .textContent =
             wind.toFixed(1) +
             " km/h";
 
 
         document
-            .getElementById("humidity")
+            .getElementById(
+                "humidity"
+            )
             .textContent =
             humidity +
             " %";
 
 
         document
-            .getElementById("elevation")
+            .getElementById(
+                "elevation"
+            )
             .textContent =
             Math.round(
                 elevation
@@ -1490,24 +1248,24 @@ async function loadSelectedWeather(
 
 
         document
-            .getElementById("windDirection")
+            .getElementById(
+                "windDirection"
+            )
             .textContent =
             direction +
             "°";
 
 
         document
-            .getElementById("precipitation")
+            .getElementById(
+                "precipitation"
+            )
             .textContent =
             precipitation.toFixed(1) +
             " mm";
 
 
-        /*
-            Environmental fire-risk score.
-        */
-
-        calculateFireRisk(
+        calculateRisk(
             temperature,
             humidity,
             wind,
@@ -1516,10 +1274,34 @@ async function loadSelectedWeather(
 
 
         setStatus(
-            "Live environmental data loaded.",
+            "Live weather and terrain loaded.",
             "ok"
         );
 
+
+        /*
+            Check visual satellite layer around
+            selected point through the displayed
+            thermal-anomaly map.
+
+            We intentionally do NOT invent a fire
+            detection at the clicked point.
+        */
+
+        document
+            .getElementById(
+                "fireStatusTitle"
+            )
+            .textContent =
+            "SATELLITE FIRE STATUS";
+
+
+        document
+            .getElementById(
+                "fireStatusText"
+            )
+            .textContent =
+            "The red satellite layer shows thermal anomalies detected by the satellite. Click directly on a visible red anomaly to inspect it.";
 
     }
     catch(error){
@@ -1527,7 +1309,7 @@ async function loadSelectedWeather(
         console.error(error);
 
         setStatus(
-            "Could not load live weather data.",
+            "Could not load live environmental data.",
             "error"
         );
 
@@ -1537,10 +1319,10 @@ async function loadSelectedWeather(
 
 
 /* =========================================================
-   FIRE-RISK ESTIMATE
+   ENVIRONMENTAL FIRE RISK
 ========================================================= */
 
-function calculateFireRisk(
+function calculateRisk(
     temperature,
     humidity,
     wind,
@@ -1548,15 +1330,11 @@ function calculateFireRisk(
 ){
 
     /*
-        This is an ENVIRONMENTAL RISK SCORE.
+        This is an environmental risk score.
 
-        It is deliberately NOT labelled as a
-        probability of ignition.
-
-        Higher temperature + low humidity +
-        strong wind + little rain = higher risk.
+        It is NOT a mathematical probability that
+        a fire will start.
     */
-
 
     let score = 0;
 
@@ -1638,7 +1416,7 @@ function calculateFireRisk(
     }
 
 
-    /* Rain reduces immediate environmental risk */
+    /* Rain */
 
     if(precipitation >= 5){
 
@@ -1678,10 +1456,10 @@ function calculateFireRisk(
             "VERY HIGH";
 
         color =
-            "rgba(255,59,48,.58)";
+            "rgba(255,59,48,.62)";
 
         description =
-            "Very hot/dry/windy conditions. Environmental fire risk is elevated.";
+            "Very hot, dry or windy conditions. Environmental fire risk is elevated.";
 
     }
     else if(score >= 45){
@@ -1693,7 +1471,7 @@ function calculateFireRisk(
             "rgba(255,138,33,.60)";
 
         description =
-            "Hot or dry conditions are present. Fire risk is elevated but not classified as very high.";
+            "Hot or dry conditions are present. Environmental fire risk is elevated.";
 
     }
     else{
@@ -1702,7 +1480,7 @@ function calculateFireRisk(
             "LOW";
 
         color =
-            "rgba(49,219,119,.38)";
+            "rgba(49,219,119,.40)";
 
         description =
             "Current environmental conditions indicate comparatively lower fire risk.";
@@ -1711,13 +1489,17 @@ function calculateFireRisk(
 
 
     document
-        .getElementById("riskScore")
+        .getElementById(
+            "riskScore"
+        )
         .textContent =
         score;
 
 
     document
-        .getElementById("riskDescription")
+        .getElementById(
+            "riskDescription"
+        )
         .textContent =
         label +
         " — " +
@@ -1726,7 +1508,9 @@ function calculateFireRisk(
 
     const fill =
         document
-            .getElementById("riskFill");
+            .getElementById(
+                "riskFill"
+            );
 
 
     fill.style.width =
@@ -1739,99 +1523,67 @@ function calculateFireRisk(
 
 
     /*
-        IMPORTANT:
-
-        We are not claiming that this score means
-        "70% chance of fire".
+        Color the selected point according
+        to environmental risk.
     */
 
+    if(selectedMarker){
 
-    updateRiskMarkerColor(
-        score
-    );
+        let markerColor =
+            "#31db77";
+
+
+        if(score >= 70){
+
+            markerColor =
+                "#ff3b30";
+
+        }
+        else if(score >= 45){
+
+            markerColor =
+                "#ff8a21";
+
+        }
+
+
+        selectedMarker.setStyle({
+
+            fillColor:
+                markerColor,
+
+            color:
+                "#ffffff"
+
+        });
+
+    }
 
 }
 
 
 /* =========================================================
-   COLOR SELECTED MARKER
+   GLOBAL ENVIRONMENTAL RISK GRID
 ========================================================= */
 
-function updateRiskMarkerColor(
-    score
-){
-
-    if(!selectedMarker){
-
-        return;
-
-    }
-
-
-    let color =
-        "#31db77";
-
-
-    if(score >= 70){
-
-        color =
-            "#ff3b30";
-
-    }
-    else if(score >= 45){
-
-        color =
-            "#ff8a21";
-
-    }
-
-
-    selectedMarker.setStyle({
-
-        fillColor:
-            color,
-
-        color:
-            "#ffffff"
-
-    });
-
-}
-
-
-/* =========================================================
-   GLOBAL WEATHER-RISK GRID
-========================================================= */
-
-async function updateGlobalRiskGrid(){
+async function updateRiskGrid(){
 
     clearRiskGrid();
 
 
-    const step =
-        Number(
-            document
-                .getElementById(
-                    "gridResolution"
-                )
-                .value
-        );
-
-
     setStatus(
-        "Building live environmental risk map..."
+        "Loading live environmental risk map..."
     );
 
 
     /*
-        Create global grid points.
+        Coarse global grid.
 
-        The grid is deliberately coarse so that
-        it can be updated in a browser without
-        overwhelming the public weather API.
-
-        Clicking a location gives exact weather.
+        Exact clicked location always receives
+        fresh coordinate-specific weather.
     */
+
+    const step = 10;
 
     const points = [];
 
@@ -1858,12 +1610,7 @@ async function updateGlobalRiskGrid(){
     }
 
 
-    /*
-        Request in batches because Open-Meteo supports
-        multiple comma-separated coordinates.
-    */
-
-    const batchSize = 40;
+    const batchSize = 35;
 
 
     for(
@@ -1882,8 +1629,8 @@ async function updateGlobalRiskGrid(){
         const lats =
             batch
                 .map(
-                    p =>
-                        p.lat
+                    point =>
+                        point.lat
                 )
                 .join(",");
 
@@ -1891,8 +1638,8 @@ async function updateGlobalRiskGrid(){
         const lons =
             batch
                 .map(
-                    p =>
-                        p.lon
+                    point =>
+                        point.lon
                 )
                 .join(",");
 
@@ -1908,6 +1655,7 @@ async function updateGlobalRiskGrid(){
             lons +
 
             "&current=" +
+
             "temperature_2m," +
             "relative_humidity_2m," +
             "wind_speed_10m," +
@@ -1942,20 +1690,17 @@ async function updateGlobalRiskGrid(){
 
 
             locations.forEach(
-                function(weather,index){
+                function(
+                    weather,
+                    index
+                ){
 
                     const point =
                         batch[index];
 
 
-                    if(!point){
-
-                        return;
-
-                    }
-
-
                     if(
+                        !point ||
                         !weather.current
                     ){
 
@@ -1997,32 +1742,12 @@ async function updateGlobalRiskGrid(){
 
 
                     const score =
-                        calculateRiskScoreOnly(
+                        riskScoreOnly(
                             temperature,
                             humidity,
                             wind,
                             precipitation
                         );
-
-
-                    /*
-                        Render only cells that look like land-ish
-                        regions using a simple heuristic that avoids
-                        most polar/ocean clutter.
-
-                        Exact selected-location weather remains available
-                        everywhere by clicking.
-                    */
-
-                    if(
-                        Math.abs(
-                            point.lat
-                        ) > 70
-                    ){
-
-                        return;
-
-                    }
 
 
                     drawRiskCell(
@@ -2041,33 +1766,28 @@ async function updateGlobalRiskGrid(){
         }
         catch(error){
 
-            console.error(
-                "Risk batch failed:",
-                error
-            );
+            console.error(error);
 
         }
 
 
-        /*
-            Small delay between batches.
-        */
-
-        await sleep(80);
+        await sleep(100);
 
     }
 
 
     document
-        .getElementById("refreshTime")
+        .getElementById(
+            "refreshTime"
+        )
         .textContent =
-        "Risk updated " +
+        "Updated " +
         new Date()
             .toLocaleTimeString();
 
 
     setStatus(
-        "Live environmental risk grid updated.",
+        "Live environmental risk map updated.",
         "ok"
     );
 
@@ -2075,10 +1795,10 @@ async function updateGlobalRiskGrid(){
 
 
 /* =========================================================
-   RISK SCORE ONLY
+   RISK CALCULATION WITHOUT UI
 ========================================================= */
 
-function calculateRiskScoreOnly(
+function riskScoreOnly(
     temperature,
     humidity,
     wind,
@@ -2089,90 +1809,58 @@ function calculateRiskScoreOnly(
 
 
     if(temperature >= 42){
-
         score += 35;
-
     }
     else if(temperature >= 37){
-
         score += 28;
-
     }
     else if(temperature >= 32){
-
         score += 20;
-
     }
     else if(temperature >= 27){
-
         score += 10;
-
     }
     else{
-
         score += 2;
-
     }
 
 
     if(humidity <= 15){
-
         score += 30;
-
     }
     else if(humidity <= 25){
-
         score += 24;
-
     }
     else if(humidity <= 35){
-
         score += 15;
-
     }
     else if(humidity <= 50){
-
         score += 6;
-
     }
 
 
     if(wind >= 45){
-
         score += 25;
-
     }
     else if(wind >= 30){
-
         score += 18;
-
     }
     else if(wind >= 20){
-
         score += 10;
-
     }
     else if(wind >= 10){
-
         score += 4;
-
     }
 
 
     if(precipitation >= 5){
-
         score -= 25;
-
     }
     else if(precipitation >= 2){
-
         score -= 15;
-
     }
     else if(precipitation >= .5){
-
         score -= 5;
-
     }
 
 
@@ -2188,7 +1876,7 @@ function calculateRiskScoreOnly(
 
 
 /* =========================================================
-   DRAW RISK CELL
+   RISK CELLS
 ========================================================= */
 
 function drawRiskCell(
@@ -2201,62 +1889,48 @@ function drawRiskCell(
     wind
 ){
 
-    let fillColor;
+    let color;
+    let opacity;
+    let label;
 
-    let fillOpacity;
 
+    if(score >= 70){
 
-    /*
-        GREEN:
-        lower environmental risk.
-    */
-
-    if(score < 45){
-
-        fillColor =
-            "#31db77";
-
-        fillOpacity =
-            0.11;
-
-    }
-
-    /*
-        ORANGE:
-        hot/dry/elevated but not very high.
-    */
-
-    else if(score < 70){
-
-        fillColor =
-            "#ff8a21";
-
-        fillOpacity =
-            0.20;
-
-    }
-
-    /*
-        TRANSPARENT RED:
-        very high environmental risk.
-    */
-
-    else{
-
-        fillColor =
+        color =
             "#ff3b30";
 
-        fillOpacity =
-            0.25;
+        opacity =
+            .25;
+
+        label =
+            "VERY HIGH";
+
+    }
+    else if(score >= 45){
+
+        color =
+            "#ff8a21";
+
+        opacity =
+            .20;
+
+        label =
+            "ELEVATED";
+
+    }
+    else{
+
+        color =
+            "#31db77";
+
+        opacity =
+            .11;
+
+        label =
+            "LOW";
 
     }
 
-
-    /*
-        Cell bounds.
-
-        Half-cell around the weather sample.
-    */
 
     const half =
         step / 2;
@@ -2277,35 +1951,36 @@ function drawRiskCell(
     ];
 
 
-    const rect =
+    const cell =
         L.rectangle(
             bounds,
             {
+
                 color:
-                    fillColor,
+                    color,
 
                 fillColor:
-                    fillColor,
+                    color,
 
                 fillOpacity:
-                    fillOpacity,
+                    opacity,
 
                 weight:
-                    0.4,
+                    .4,
 
                 opacity:
-                    0.18,
+                    .15
 
-                interactive:
-                    true
             }
         )
         .addTo(map);
 
 
-    rect.bindPopup(
+    cell.bindPopup(
 
-        "<b>ENVIRONMENTAL FIRE RISK</b><br><br>" +
+        "<b>" +
+        label +
+        " ENVIRONMENTAL FIRE RISK</b><br><br>" +
 
         "Risk score: " +
         score +
@@ -2317,42 +1992,29 @@ function drawRiskCell(
 
         "Humidity: " +
         humidity +
-        " %<br>" +
+        "%<br>" +
 
         "Wind: " +
         wind.toFixed(1) +
         " km/h<br><br>" +
 
-        "<span style='color:#ff8a21'>" +
-
-        (
-            score >= 70
-            ? "VERY HIGH"
-            : score >= 45
-            ? "ELEVATED"
-            : "LOW"
-        ) +
-
-        " ENVIRONMENTAL RISK" +
-
-        "</span><br><br>" +
-
         "<small>" +
-        "This is a weather-based estimate, not a confirmed fire detection." +
+        "This color indicates environmental conditions only. " +
+        "A green/orange/red cell is not itself proof of a fire." +
         "</small>"
 
     );
 
 
     riskLayers.push(
-        rect
+        cell
     );
 
 }
 
 
 /* =========================================================
-   CLEAR RISK GRID
+   CLEAR RISK CELLS
 ========================================================= */
 
 function clearRiskGrid(){
@@ -2374,207 +2036,16 @@ function clearRiskGrid(){
 
 
 /* =========================================================
-   LOCATION BUTTON
-========================================================= */
-
-function locateUser(){
-
-    if(
-        !navigator.geolocation
-    ){
-
-        setStatus(
-            "Geolocation is not supported.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    setStatus(
-        "Requesting your location..."
-    );
-
-
-    navigator
-        .geolocation
-        .getCurrentPosition(
-
-            async function(position){
-
-                const lat =
-                    position.coords.latitude;
-
-                const lon =
-                    position.coords.longitude;
-
-
-                map.setView(
-                    [
-                        lat,
-                        lon
-                    ],
-                    7
-                );
-
-
-                await handleMapClick(
-                    lat,
-                    lon
-                );
-
-            },
-
-            function(){
-
-                setStatus(
-                    "Location permission was unavailable.",
-                    "error"
-                );
-
-            }
-
-        );
-
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-function resetMap(){
-
-    map.setView(
-        DEFAULT_CENTER,
-        3
-    );
-
-
-    clearRiskGrid();
-
-
-    if(selectedMarker){
-
-        map.removeLayer(
-            selectedMarker
-        );
-
-        selectedMarker =
-            null;
-
-    }
-
-
-    document
-        .getElementById(
-            "temperature"
-        )
-        .textContent =
-        "—";
-
-
-    document
-        .getElementById(
-            "wind"
-        )
-        .textContent =
-        "—";
-
-
-    document
-        .getElementById(
-            "humidity"
-        )
-        .textContent =
-        "—";
-
-
-    document
-        .getElementById(
-            "elevation"
-        )
-        .textContent =
-        "—";
-
-
-    document
-        .getElementById(
-            "windDirection"
-        )
-        .textContent =
-        "—";
-
-
-    document
-        .getElementById(
-            "precipitation"
-        )
-        .textContent =
-        "—";
-
-
-    document
-        .getElementById(
-            "riskScore"
-        )
-        .textContent =
-        "—";
-
-
-    document
-        .getElementById(
-            "riskDescription"
-        )
-        .textContent =
-        "Click a location to calculate environmental fire risk.";
-
-
-    document
-        .getElementById(
-            "riskFill"
-        )
-        .style.width =
-        "0%";
-
-
-    setStatus(
-        "World view reset."
-    );
-
-}
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function sleep(ms){
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                ms
-            )
-    );
-
-}
-
-
-/* =========================================================
    BUTTONS
 ========================================================= */
 
 document
     .getElementById(
-        "loadRiskBtn"
+        "loadMapBtn"
     )
     .addEventListener(
         "click",
-        updateGlobalRiskGrid
+        updateRiskGrid
     );
 
 
@@ -2584,7 +2055,66 @@ document
     )
     .addEventListener(
         "click",
-        locateUser
+        function(){
+
+            if(
+                !navigator.geolocation
+            ){
+
+                setStatus(
+                    "Geolocation is not supported.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            setStatus(
+                "Requesting your location..."
+            );
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                async function(position){
+
+                    const lat =
+                        position.coords.latitude;
+
+                    const lon =
+                        position.coords.longitude;
+
+
+                    map.setView(
+                        [
+                            lat,
+                            lon
+                        ],
+                        7
+                    );
+
+
+                    await handleMapClick(
+                        lat,
+                        lon
+                    );
+
+                },
+
+                function(){
+
+                    setStatus(
+                        "Location permission unavailable.",
+                        "error"
+                    );
+
+                }
+
+            );
+
+        }
     );
 
 
@@ -2594,7 +2124,106 @@ document
     )
     .addEventListener(
         "click",
-        resetMap
+        function(){
+
+            map.setView(
+                DEFAULT_CENTER,
+                3
+            );
+
+
+            clearRiskGrid();
+
+
+            if(selectedMarker){
+
+                map.removeLayer(
+                    selectedMarker
+                );
+
+                selectedMarker =
+                    null;
+
+            }
+
+
+            document
+                .getElementById(
+                    "temperature"
+                )
+                .textContent =
+                "—";
+
+
+            document
+                .getElementById(
+                    "wind"
+                )
+                .textContent =
+                "—";
+
+
+            document
+                .getElementById(
+                    "humidity"
+                )
+                .textContent =
+                "—";
+
+
+            document
+                .getElementById(
+                    "elevation"
+                )
+                .textContent =
+                "—";
+
+
+            document
+                .getElementById(
+                    "windDirection"
+                )
+                .textContent =
+                "—";
+
+
+            document
+                .getElementById(
+                    "precipitation"
+                )
+                .textContent =
+                "—";
+
+
+            document
+                .getElementById(
+                    "riskScore"
+                )
+                .textContent =
+                "—";
+
+
+            document
+                .getElementById(
+                    "riskFill"
+                )
+                .style.width =
+                "0%";
+
+
+            document
+                .getElementById(
+                    "riskDescription"
+                )
+                .textContent =
+                "Click a location to calculate environmental fire risk.";
+
+
+            setStatus(
+                "World view reset."
+            );
+
+        }
     );
 
 
@@ -2606,11 +2235,11 @@ initMap();
 
 
 /*
-    Load a moderate-resolution global risk grid
-    automatically.
+    Automatically build the first
+    environmental risk grid.
 */
 
-updateGlobalRiskGrid();
+updateRiskGrid();
 
 </script>
 
