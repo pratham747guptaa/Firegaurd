@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>FIREGUARD | Live Fire Detection</title>
+<title>FIREGUARD | Live Wildfire Intelligence</title>
 
 <link
     rel="stylesheet"
@@ -15,39 +15,54 @@
 <style>
 
 /* =========================================================
-   GLOBAL
+   FIREGUARD — LIVE WILDFIRE INTELLIGENCE
+   No API key required in the HTML.
+
+   LIVE SOURCES:
+   - NASA GIBS / VIIRS thermal anomaly layer
+   - Open-Meteo current weather
+   - Open-Meteo elevation
+
+   IMPORTANT:
+   - Red fire layer = satellite thermal anomalies.
+   - Green/orange/transparent-red cells = estimated
+     environmental fire-risk score, NOT confirmed fire.
 ========================================================= */
 
-:root {
-    --bg: #05070d;
-    --panel: #0b101a;
-    --panel2: #0e1522;
-    --border: #26334a;
+:root{
+    --bg:#05070c;
+    --panel:#0b1019;
+    --panel2:#0e1520;
+    --border:#27344a;
 
-    --text: #eef3ff;
-    --muted: #8794ad;
+    --text:#eef4ff;
+    --muted:#8794aa;
 
-    --red: #ff3b30;
-    --orange: #ff7a18;
-    --yellow: #ffd400;
-    --green: #40e27f;
+    --green:#31db77;
+    --orange:#ff8a21;
+    --red:#ff3b30;
+    --yellow:#ffd400;
+    --cyan:#20d9ff;
+    --white:#ffffff;
 }
 
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-body {
-    margin: 0;
+body{
+    margin:0;
+    min-height:100vh;
+
     background:
         radial-gradient(
             circle at 20% 0%,
-            rgba(100, 30, 20, 0.18),
-            transparent 35%
+            rgba(80,35,20,.16),
+            transparent 36%
         ),
         var(--bg);
 
-    color: var(--text);
+    color:var(--text);
 
     font-family:
         Arial,
@@ -60,61 +75,65 @@ body {
    HEADER
 ========================================================= */
 
-header {
-    height: 68px;
+header{
+    height:68px;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding:
+        0 24px;
 
-    padding: 0 24px;
+    display:flex;
 
-    background: #080c14;
+    align-items:center;
+
+    justify-content:space-between;
+
+    background:#080c13;
 
     border-bottom:
         1px solid
         var(--border);
 }
 
-.brand {
-    font-size: 24px;
-    font-weight: 900;
+.brand{
+    font-size:24px;
 
-    letter-spacing: 3px;
+    font-weight:900;
+
+    letter-spacing:3px;
 }
 
-.brand span {
-    color: var(--red);
+.brand span{
+    color:var(--red);
 }
 
-.live {
-    color: var(--green);
+.live-pill{
+    color:var(--green);
 
     border:
         1px solid
-        rgba(64, 226, 127, 0.35);
+        rgba(49,219,119,.35);
 
     background:
-        rgba(20, 70, 40, 0.18);
+        rgba(20,80,45,.18);
 
     padding:
-        7px
-        11px;
+        7px 12px;
 
-    border-radius: 999px;
+    border-radius:
+        999px;
 
-    font-size: 10px;
+    font-size:10px;
 }
 
 
 /* =========================================================
-   LAYOUT
+   MAIN
 ========================================================= */
 
-.wrapper {
-    width: min(1500px, 96vw);
+.wrapper{
+    width:min(1500px,96vw);
 
-    margin: auto;
+    margin:auto;
 
     padding:
         18px
@@ -122,50 +141,52 @@ header {
         30px;
 }
 
-.title {
-    margin: 0;
+.title{
+    margin:0;
 
-    font-size: 28px;
+    font-size:27px;
 }
 
-.subtitle {
-    color: var(--muted);
+.subtitle{
+    margin:
+        5px 0
+        16px;
 
-    margin-top: 5px;
-    margin-bottom: 16px;
+    color:var(--muted);
 
-    font-size: 11px;
+    font-size:11px;
 }
 
-.layout {
-    display: grid;
+.layout{
+    display:grid;
 
     grid-template-columns:
-        265px
-        minmax(0, 1fr)
-        290px;
+        275px
+        minmax(0,1fr)
+        305px;
 
-    gap: 14px;
+    gap:14px;
 }
 
 .panel,
-.map-panel {
+.map-panel,
+.card{
     background:
         linear-gradient(
             180deg,
             var(--panel),
-            #080c14
+            #080d15
         );
 
     border:
         1px solid
         var(--border);
 
-    border-radius: 10px;
+    border-radius:10px;
 }
 
-.panel {
-    padding: 14px;
+.panel{
+    padding:14px;
 }
 
 
@@ -173,15 +194,14 @@ header {
    HEADINGS
 ========================================================= */
 
-h2 {
+h2{
     margin:
-        0
-        0
-        13px;
+        0 0
+        12px;
 
-    font-size: 12px;
+    font-size:12px;
 
-    letter-spacing: 1px;
+    letter-spacing:1px;
 }
 
 
@@ -189,98 +209,98 @@ h2 {
    CONTROLS
 ========================================================= */
 
-label {
-    display: block;
+label{
+    display:block;
 
-    color: var(--muted);
+    color:var(--muted);
 
     margin:
-        11px
-        0
+        11px 0
         5px;
 
-    font-size: 9px;
+    font-size:9px;
 }
 
-input,
-select {
-    width: 100%;
-
-    color: var(--text);
-
-    background: #070a11;
-
-    border:
-        1px solid
-        #35425a;
-
-    border-radius: 6px;
+select,
+input{
+    width:100%;
 
     padding:
-        9px
-        10px;
+        9px 10px;
 
-    font-size: 10px;
-}
+    background:#070a11;
 
-button {
-    width: 100%;
-
-    margin-top: 10px;
-
-    padding: 10px;
-
-    border-radius: 6px;
-
-    cursor: pointer;
-
-    font-size: 10px;
-
-    font-weight: 800;
-}
-
-.primary {
-    color: white;
-
-    background: var(--red);
-
-    border: 0;
-}
-
-.secondary {
-    color: white;
-
-    background: #151d2d;
+    color:var(--text);
 
     border:
         1px solid
-        #394761;
+        #35415a;
+
+    border-radius:6px;
+
+    font-size:10px;
 }
 
-.note {
-    margin-top: 11px;
+button{
+    width:100%;
 
-    color: #738099;
+    margin-top:10px;
 
-    font-size: 8px;
+    padding:10px;
 
-    line-height: 1.6;
+    border-radius:7px;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    font-weight:800;
 }
 
-.status {
-    margin-top: 9px;
+.primary{
+    background:var(--red);
 
-    color: var(--muted);
+    color:white;
 
-    font-size: 9px;
+    border:0;
 }
 
-.status-ok {
-    color: var(--green);
+.secondary{
+    background:#141c2b;
+
+    color:white;
+
+    border:
+        1px solid
+        #3a4861;
 }
 
-.status-error {
-    color: var(--red);
+.status{
+    margin-top:9px;
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    line-height:1.5;
+}
+
+.status-ok{
+    color:var(--green);
+}
+
+.status-error{
+    color:var(--red);
+}
+
+.note{
+    margin-top:11px;
+
+    color:#727f97;
+
+    font-size:8px;
+
+    line-height:1.6;
 }
 
 
@@ -288,191 +308,297 @@ button {
    MAP
 ========================================================= */
 
-.map-panel {
-    padding: 10px;
+.map-panel{
+    padding:10px;
 }
 
-#map {
-    height: 650px;
+#map{
+    height:650px;
 
-    border-radius: 8px;
+    border-radius:8px;
 
-    overflow: hidden;
+    overflow:hidden;
 }
 
-.legend {
-    display: flex;
+.map-toolbar{
+    display:flex;
 
-    flex-wrap: wrap;
+    justify-content:space-between;
 
-    gap: 13px;
+    align-items:center;
 
-    padding:
-        9px
-        2px
-        0;
-
-    color: var(--muted);
-
-    font-size: 9px;
+    margin-bottom:8px;
 }
 
-.legend-item {
-    display: flex;
+.map-title{
+    font-size:11px;
 
-    align-items: center;
-
-    gap: 5px;
+    font-weight:800;
 }
 
-.legend-dot {
-    width: 9px;
-    height: 9px;
+.map-refresh{
+    color:var(--muted);
 
-    border-radius: 50%;
+    font-size:8px;
+}
+
+.legend{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:11px;
+
+    margin-top:9px;
+
+    color:var(--muted);
+
+    font-size:8px;
+}
+
+.legend-item{
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+}
+
+.legend-color{
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+}
+
+.legend-color.actual{
+    background:#ff2d20;
+}
+
+.legend-color.high{
+    background:rgba(255,59,48,.55);
+}
+
+.legend-color.orange{
+    background:rgba(255,138,33,.65);
+}
+
+.legend-color.green{
+    background:rgba(49,219,119,.42);
 }
 
 
 /* =========================================================
-   DATA PANEL
+   RIGHT PANEL
 ========================================================= */
 
-.data-row {
-    display: flex;
+.data-row{
+    display:flex;
 
-    justify-content: space-between;
+    justify-content:space-between;
 
-    gap: 8px;
+    gap:8px;
 
     padding:
-        9px
-        0;
+        8px 0;
 
     border-bottom:
         1px solid
-        #202b3e;
+        #202a3c;
 
-    font-size: 9px;
+    font-size:9px;
 }
 
-.data-row span:last-child {
-    font-weight: 800;
+.data-value{
+    font-weight:800;
 }
 
-.red {
-    color: var(--red);
+.live{
+    color:var(--green);
 }
 
-.orange {
-    color: var(--orange);
+.actual{
+    color:var(--red);
 }
 
-.yellow {
-    color: var(--yellow);
-}
-
-.green {
-    color: var(--green);
+.estimated{
+    color:var(--orange);
 }
 
 
 /* =========================================================
-   FIRE STATS
+   SELECTED LOCATION
 ========================================================= */
 
-.stat-card {
-    margin-top: 12px;
+.location-card{
+    margin-top:11px;
 
-    padding: 11px;
+    padding:10px;
 
-    background:
-        #080d16;
+    background:#080d15;
 
     border:
         1px solid
-        #26344b;
+        #29364c;
 
-    border-radius: 7px;
+    border-radius:7px;
 }
 
-.stat-title {
-    font-size: 10px;
+.location-title{
+    font-size:10px;
 
-    font-weight: 800;
+    font-weight:800;
 
-    margin-bottom: 8px;
+    margin-bottom:7px;
 }
 
-.stat-grid {
-    display: grid;
+.coordinates{
+    color:var(--muted);
+
+    font-size:8px;
+
+    margin-bottom:8px;
+}
+
+.info-grid{
+    display:grid;
 
     grid-template-columns:
         1fr
         1fr;
 
-    gap: 7px;
+    gap:7px;
 }
 
-.stat {
-    padding: 8px;
+.info{
+    padding:8px;
+
+    background:#0b111a;
 
     border:
         1px solid
-        #222d41;
+        #202c40;
 
-    background:
-        #0b111b;
-
-    border-radius: 5px;
+    border-radius:5px;
 }
 
-.stat small {
-    display: block;
+.info small{
+    display:block;
 
-    color: var(--muted);
+    color:var(--muted);
 
-    font-size: 7px;
+    font-size:7px;
 }
 
-.stat strong {
-    display: block;
+.info strong{
+    display:block;
 
-    margin-top: 4px;
+    margin-top:4px;
 
-    font-size: 16px;
+    font-size:15px;
 }
 
 
 /* =========================================================
-   FIRE ICONS
+   RISK CARD
 ========================================================= */
 
-.fire-icon {
-    font-size: 23px;
+.risk-card{
+    margin-top:11px;
 
-    text-align: center;
+    padding:11px;
 
-    line-height: 27px;
+    border-radius:7px;
 
-    filter:
-        drop-shadow(
-            0 0 5px
-            rgba(255, 50, 20, 0.9)
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,59,48,.08),
+            rgba(255,138,33,.04)
         );
+
+    border:
+        1px solid
+        #363144;
 }
 
-.start-icon {
-    font-size: 27px;
+.risk-head{
+    display:flex;
 
-    text-align: center;
+    justify-content:space-between;
 
-    line-height: 30px;
+    align-items:center;
+}
 
-    filter:
-        drop-shadow(
-            0 0 7px
-            rgba(255, 220, 0, 0.95)
-        );
+.risk-label{
+    font-size:10px;
+
+    font-weight:800;
+}
+
+.risk-score{
+    font-size:22px;
+
+    font-weight:900;
+}
+
+.risk-bar{
+    margin-top:8px;
+
+    height:7px;
+
+    background:#202a3b;
+
+    border-radius:999px;
+
+    overflow:hidden;
+}
+
+.risk-fill{
+    height:100%;
+
+    width:0%;
+
+    transition:
+        width .35s ease;
+}
+
+
+/* =========================================================
+   FIRE DETECTION CARD
+========================================================= */
+
+.fire-card{
+    margin-top:11px;
+
+    padding:11px;
+
+    border-radius:7px;
+
+    background:
+        rgba(255,59,48,.07);
+
+    border:
+        1px solid
+        rgba(255,59,48,.28);
+}
+
+.fire-title{
+    color:var(--red);
+
+    font-size:10px;
+
+    font-weight:900;
+}
+
+.fire-description{
+    margin-top:5px;
+
+    color:var(--muted);
+
+    font-size:8px;
+
+    line-height:1.55;
 }
 
 
@@ -481,16 +607,16 @@ button {
 ========================================================= */
 
 .leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-    background: #101726;
+.leaflet-popup-tip{
+    background:#111827;
 
-    color: var(--text);
+    color:#edf3ff;
 }
 
-.leaflet-popup-content {
-    font-size: 10px;
+.leaflet-popup-content{
+    font-size:9px;
 
-    line-height: 1.6;
+    line-height:1.55;
 }
 
 
@@ -498,14 +624,15 @@ button {
    RESPONSIVE
 ========================================================= */
 
-@media(max-width: 1100px) {
+@media(max-width:1120px){
 
-    .layout {
-        grid-template-columns: 1fr;
+    .layout{
+        grid-template-columns:
+            1fr;
     }
 
-    #map {
-        height: 500px;
+    #map{
+        height:500px;
     }
 }
 
@@ -522,8 +649,8 @@ button {
         FIRE<span>GUARD</span>
     </div>
 
-    <div class="live">
-        ● NASA LIVE FIRE DETECTION
+    <div class="live-pill">
+        ● LIVE GEOSPATIAL MONITORING
     </div>
 
 </header>
@@ -532,11 +659,11 @@ button {
 <div class="wrapper">
 
     <h1 class="title">
-        Live Wildfire Detection & Fire Origin Analysis
+        Live Wildfire Detection & Environmental Fire Risk
     </h1>
 
     <div class="subtitle">
-        PS-01 • Real-time satellite fire detections only • No simulated fire points
+        PS-01 • Actual satellite fire detections + live weather + terrain-based environmental risk
     </div>
 
 
@@ -550,147 +677,95 @@ button {
         <aside class="panel">
 
             <h2>
-                NASA FIRMS CONNECTION
+                LIVE FIRE MONITOR
             </h2>
 
 
             <label>
-                NASA FIRMS MAP KEY
+                Risk Overlay Resolution
             </label>
 
-            <input
-                id="mapKey"
-                type="password"
-                placeholder="Paste your free FIRMS MAP_KEY"
-            >
+            <select id="gridResolution">
+
+                <option value="10">
+                    Global — 10° grid
+                </option>
+
+                <option value="7">
+                    Global — 7° grid
+                </option>
+
+                <option value="5">
+                    Regional-style — 5° grid
+                </option>
+
+            </select>
 
 
             <button
                 class="primary"
-                onclick="loadRealFires()"
+                id="loadRiskBtn"
             >
-                LOAD REAL-TIME FIRES
+                UPDATE LIVE MAP
             </button>
 
 
             <button
                 class="secondary"
-                onclick="refreshFires()"
-            >
-                REFRESH FIRE DATA
-            </button>
-
-
-            <button
-                class="secondary"
-                onclick="locateUser()"
+                id="locateBtn"
             >
                 USE MY LOCATION
             </button>
 
 
-            <label>
-                Detection Window
-            </label>
-
-            <select id="hours">
-
-                <option value="24">
-                    Last 24 Hours
-                </option>
-
-                <option value="48">
-                    Last 48 Hours
-                </option>
-
-                <option value="72">
-                    Last 72 Hours
-                </option>
-
-            </select>
+            <button
+                class="secondary"
+                id="resetBtn"
+            >
+                RESET WORLD VIEW
+            </button>
 
 
             <div
                 class="status"
                 id="status"
             >
-                Waiting for NASA FIRMS data.
+                Initializing live layers...
             </div>
 
 
             <div class="note">
 
-                NASA FIRMS active-fire data are satellite
-                detections, not guaranteed ground-truth fire
-                boundaries.
+                Red fire marks come from NASA's satellite
+                thermal-anomaly layer.
 
                 <br><br>
 
-                NASA FIRMS requires a free MAP_KEY for its
-                API/WMS/WFS services.
+                Green / orange / transparent-red regions
+                represent an environmental fire-risk estimate
+                from current weather.
+
+                <br><br>
+
+                The risk estimate is NOT a probability of fire
+                and should not be interpreted as a confirmed
+                wildfire prediction.
 
             </div>
 
 
-            <div class="stat-card">
+            <div class="fire-card">
 
-                <div class="stat-title">
-                    REAL-TIME FIRE DATA
+                <div class="fire-title">
+                    REAL FIRE DATA
                 </div>
 
+                <div class="fire-description">
 
-                <div class="stat-grid">
+                    NASA VIIRS thermal anomalies are displayed
+                    directly over the map.
 
-                    <div class="stat">
-
-                        <small>
-                            DETECTIONS
-                        </small>
-
-                        <strong id="fireCount">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <small>
-                            HIGH CONFIDENCE
-                        </small>
-
-                        <strong id="highConfidence">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <small>
-                            SATELLITE
-                        </small>
-
-                        <strong>
-                            VIIRS
-                        </strong>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <small>
-                            UPDATED
-                        </small>
-
-                        <strong id="lastUpdate">
-                            —
-                        </strong>
-
-                    </div>
+                    No simulated fire icons are used.
 
                 </div>
 
@@ -701,16 +776,27 @@ button {
 
 
         <!-- =================================================
-             CENTER MAP
+             MAP
         ================================================== -->
 
         <main>
 
             <div class="map-panel">
 
-                <h2>
-                    REAL-TIME SATELLITE FIRE MAP
-                </h2>
+                <div class="map-toolbar">
+
+                    <div class="map-title">
+                        WORLDWIDE LIVE FIRE + RISK MAP
+                    </div>
+
+                    <div
+                        class="map-refresh"
+                        id="refreshTime"
+                    >
+                        —
+                    </div>
+
+                </div>
 
 
                 <div id="map"></div>
@@ -721,37 +807,43 @@ button {
                     <div class="legend-item">
 
                         <span
-                            style="font-size:18px"
-                        >
-                            🔥
-                        </span>
-
-                        NASA detected active fire
-
-                    </div>
-
-
-                    <div class="legend-item">
-
-                        <span
-                            style="font-size:20px"
-                        >
-                            🟡
-                        </span>
-
-                        Earliest detected point in cluster
-
-                    </div>
-
-
-                    <div class="legend-item">
-
-                        <span
-                            class="legend-dot"
-                            style="background:#ff3b30"
+                            class="legend-color actual"
                         ></span>
 
-                        24-hour fire layer
+                        Actual satellite thermal anomaly
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span
+                            class="legend-color high"
+                        ></span>
+
+                        Very high environmental fire risk
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span
+                            class="legend-color orange"
+                        ></span>
+
+                        Hot / elevated environmental risk
+
+                    </div>
+
+
+                    <div class="legend-item">
+
+                        <span
+                            class="legend-color green"
+                        ></span>
+
+                        Lower environmental fire risk
 
                     </div>
 
@@ -769,54 +861,209 @@ button {
 
         <aside class="panel">
 
+
             <h2>
-                SELECTED FIRE
+                SELECTED LOCATION
             </h2>
 
 
-            <div
-                class="stat-card"
-                id="selectedFire"
-            >
+            <div class="location-card">
 
-                <div class="stat-title">
-                    CLICK A FIRE ICON
+                <div
+                    class="location-title"
+                >
+                    CLICK ANYWHERE ON MAP
                 </div>
 
-                <div class="small">
-                    Click an actual NASA FIRMS
-                    fire detection on the map.
+
+                <div
+                    class="coordinates"
+                    id="coordinates"
+                >
+                    —
+                </div>
+
+
+                <div class="info-grid">
+
+
+                    <div class="info">
+
+                        <small>
+                            TEMPERATURE
+                        </small>
+
+                        <strong
+                            id="temperature"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            WIND
+                        </small>
+
+                        <strong
+                            id="wind"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            HUMIDITY
+                        </small>
+
+                        <strong
+                            id="humidity"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            ELEVATION
+                        </small>
+
+                        <strong
+                            id="elevation"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            WIND DIRECTION
+                        </small>
+
+                        <strong
+                            id="windDirection"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            RAIN
+                        </small>
+
+                        <strong
+                            id="precipitation"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
                 </div>
 
             </div>
+
+
+
+            <!-- RISK -->
+
+            <div class="risk-card">
+
+                <div class="risk-head">
+
+                    <div class="risk-label">
+                        ESTIMATED FIRE RISK
+                    </div>
+
+                    <div
+                        class="risk-score"
+                        id="riskScore"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="risk-bar">
+
+                    <div
+                        class="risk-fill"
+                        id="riskFill"
+                    ></div>
+
+                </div>
+
+
+                <div
+                    class="fire-description"
+                    id="riskDescription"
+                >
+                    Click a location to calculate its
+                    current environmental risk.
+                </div>
+
+            </div>
+
+
+
+            <!-- FIRE STATUS -->
+
+            <div class="fire-card">
+
+                <div
+                    class="fire-title"
+                    id="fireStatusTitle"
+                >
+                    SATELLITE FIRE STATUS
+                </div>
+
+
+                <div
+                    class="fire-description"
+                    id="fireStatusText"
+                >
+                    Click a location on a visible
+                    thermal anomaly to inspect it.
+                </div>
+
+            </div>
+
 
 
             <h2 style="margin-top:16px">
-                FIRE DATA SOURCE
+                DATA SOURCES
             </h2>
 
 
             <div class="data-row">
 
                 <span>
-                    Satellite source
+                    Satellite fire layer
                 </span>
 
-                <span class="green">
-                    NASA FIRMS
-                </span>
-
-            </div>
-
-
-            <div class="data-row">
-
-                <span>
-                    Sensor
-                </span>
-
-                <span class="green">
-                    VIIRS
+                <span
+                    class="data-value actual"
+                >
+                    NASA VIIRS
                 </span>
 
             </div>
@@ -825,24 +1072,13 @@ button {
             <div class="data-row">
 
                 <span>
-                    Product resolution
+                    Weather
                 </span>
 
-                <span class="green">
-                    375 m
-                </span>
-
-            </div>
-
-
-            <div class="data-row">
-
-                <span>
-                    Data type
-                </span>
-
-                <span class="red">
-                    ACTIVE FIRE
+                <span
+                    class="data-value live"
+                >
+                    OPEN-METEO
                 </span>
 
             </div>
@@ -851,11 +1087,13 @@ button {
             <div class="data-row">
 
                 <span>
-                    Fire predictions
+                    Elevation
                 </span>
 
-                <span class="green">
-                    NONE
+                <span
+                    class="data-value live"
+                >
+                    COPERNICUS DEM
                 </span>
 
             </div>
@@ -864,38 +1102,28 @@ button {
             <div class="data-row">
 
                 <span>
-                    Simulated points
+                    Fire risk
                 </span>
 
-                <span class="green">
-                    NONE
+                <span
+                    class="data-value estimated"
+                >
+                    ESTIMATED
                 </span>
 
             </div>
 
 
-            <div class="stat-card">
+            <div class="note">
 
-                <div class="stat-title">
-                    "START POINT" LOGIC
-                </div>
+                "Actual fire" means a satellite thermal
+                anomaly detected by the NASA layer.
 
-                <div class="small">
+                <br><br>
 
-                    When multiple actual NASA
-                    detections are close together,
-                    FIREGUARD identifies the
-                    earliest satellite detection
-                    within that cluster.
-
-                    <br><br>
-
-                    This is labelled as
-                    <b>EARLIEST DETECTED POINT</b>,
-                    not the scientifically confirmed
-                    ignition point.
-
-                </div>
+                A satellite thermal anomaly is not the same
+                thing as a confirmed ignition point or
+                ground-truth fire perimeter.
 
             </div>
 
@@ -916,58 +1144,24 @@ button {
 <script>
 
 /* =========================================================
-   CONFIGURATION
+   CONSTANTS
 ========================================================= */
 
-/*
-    NASA FIRMS requires a free MAP_KEY.
+const NASA_GIBS_WMS =
+    "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi";
 
-    Get one from:
-    https://firms.modaps.eosdis.nasa.gov/api/map_key/
+const DEFAULT_CENTER = [
+    20.5937,
+    78.9629
+];
 
-    Do NOT hard-code your key into a public GitHub repository.
+let map;
 
-    The user enters it into the field at runtime.
-*/
+let selectedMarker = null;
 
-const FIRMS_API_BASE =
-    "https://firms.modaps.eosdis.nasa.gov/api/area/csv/";
+let riskLayers = [];
 
-const DEFAULT_LAT = 20.5937;
-const DEFAULT_LON = 78.9629;
-
-const MAX_FIRE_MARKERS = 1500;
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
-let map = null;
-
-let fireMarkers = [];
-
-let startMarkers = [];
-
-let allFireData = [];
-
-
-/* =========================================================
-   LOCAL STORAGE
-========================================================= */
-
-const savedKey =
-    localStorage.getItem(
-        "fireguard_firms_key"
-    );
-
-if(savedKey){
-
-    document
-        .getElementById("mapKey")
-        .value = savedKey;
-
-}
+let latestWeather = null;
 
 
 /* =========================================================
@@ -979,377 +1173,362 @@ function initMap(){
     map =
         L.map("map")
         .setView(
-            [
-                DEFAULT_LAT,
-                DEFAULT_LON
-            ],
-            5
+            DEFAULT_CENTER,
+            3
         );
 
+
+    /*
+        Base map.
+    */
 
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
-            maxZoom: 19,
+            maxZoom:19,
 
             attribution:
                 "&copy; OpenStreetMap contributors"
         }
     ).addTo(map);
 
+
+    /*
+        REAL NASA VIIRS FIRE LAYER.
+
+        No MAP_KEY is embedded.
+        This is the GIBS visualization layer.
+    */
+
+    const nasaFireLayer =
+        L.tileLayer.wms(
+            NASA_GIBS_WMS,
+            {
+                layers:
+                    "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+
+                format:
+                    "image/png",
+
+                transparent:
+                    true,
+
+                version:
+                    "1.3.0",
+
+                opacity:
+                    1,
+
+                attribution:
+                    "NASA GIBS / VIIRS"
+            }
+        );
+
+
+    nasaFireLayer.addTo(map);
+
+
+    /*
+        Click the map.
+    */
+
+    map.on(
+        "click",
+        function(event){
+
+            handleMapClick(
+                event.latlng.lat,
+                event.latlng.lng
+            );
+
+        }
+    );
+
 }
 
 
-initMap();
-
-
 /* =========================================================
-   STATUS
+   MAP CLICK
 ========================================================= */
 
-function setStatus(
-    message,
-    type = ""
+async function handleMapClick(
+    lat,
+    lon
 ){
 
-    const status =
-        document.getElementById(
-            "status"
-        );
-
-    status.textContent =
-        message;
-
-    status.className =
-        "status " +
-        (
-            type
-            ? "status-" + type
-            : ""
-        );
-
-}
-
-
-/* =========================================================
-   FIRE ICON
-========================================================= */
-
-function createFireIcon(){
-
-    return L.divIcon({
-
-        className:
-            "fire-icon",
-
-        html:
-            "🔥",
-
-        iconSize:
-            [
-                28,
-                28
-            ],
-
-        iconAnchor:
-            [
-                14,
-                14
-            ]
-
-    });
-
-}
-
-
-/* =========================================================
-   EARLIEST DETECTED POINT ICON
-========================================================= */
-
-function createStartIcon(){
-
-    return L.divIcon({
-
-        className:
-            "start-icon",
-
-        html:
-            "🟡",
-
-        iconSize:
-            [
-                32,
-                32
-            ],
-
-        iconAnchor:
-            [
-                16,
-                16
-            ]
-
-    });
-
-}
-
-
-/* =========================================================
-   CLEAR FIRE MARKERS
-========================================================= */
-
-function clearFireMarkers(){
-
-    fireMarkers.forEach(
-        marker => {
-
-            map.removeLayer(
-                marker
-            );
-
-        }
+    updateSelectedMarker(
+        lat,
+        lon
     );
 
-    startMarkers.forEach(
-        marker => {
 
-            map.removeLayer(
-                marker
-            );
-
-        }
+    await loadSelectedWeather(
+        lat,
+        lon
     );
-
-    fireMarkers = [];
-
-    startMarkers = [];
 
 }
 
 
 /* =========================================================
-   GET MAP KEY
+   SELECTED MARKER
 ========================================================= */
 
-function getMapKey(){
+function updateSelectedMarker(
+    lat,
+    lon
+){
 
-    const key =
-        document
-            .getElementById(
-                "mapKey"
-            )
-            .value
-            .trim();
+    if(selectedMarker){
 
-
-    if(!key){
-
-        setStatus(
-            "Enter your NASA FIRMS MAP_KEY first.",
-            "error"
+        map.removeLayer(
+            selectedMarker
         );
-
-        return null;
 
     }
 
 
-    /*
-        Store locally only.
-        It is NOT committed to GitHub.
-    */
+    selectedMarker =
+        L.circleMarker(
+            [
+                lat,
+                lon
+            ],
+            {
+                radius:7,
 
-    localStorage.setItem(
-        "fireguard_firms_key",
-        key
-    );
+                color:"#ffffff",
+
+                weight:2,
+
+                fillColor:"#20d9ff",
+
+                fillOpacity:.95
+            }
+        )
+        .addTo(map);
 
 
-    return key;
+    document
+        .getElementById("coordinates")
+        .textContent =
+
+        "LAT " +
+        lat.toFixed(4) +
+
+        " • LON " +
+        lon.toFixed(4);
+
+
+    selectedMarker
+        .bindPopup(
+            "<b>SELECTED LOCATION</b><br>" +
+            lat.toFixed(4) +
+            ", " +
+            lon.toFixed(4)
+        )
+        .openPopup();
 
 }
 
 
 /* =========================================================
-   FETCH REAL NASA FIRMS DATA
+   LIVE WEATHER FOR CLICKED POINT
 ========================================================= */
 
-async function loadRealFires(){
-
-    const key =
-        getMapKey();
-
-
-    if(!key){
-
-        return;
-
-    }
-
-
-    const hours =
-        Number(
-            document
-                .getElementById(
-                    "hours"
-                )
-                .value
-        );
-
+async function loadSelectedWeather(
+    lat,
+    lon
+){
 
     setStatus(
-        "Downloading NASA FIRMS active-fire detections..."
+        "Loading live weather and elevation..."
     );
 
 
-    /*
-       NASA FIRMS Area API.
+    const weatherURL =
 
-       VIIRS NOAA-20 NRT is used here.
-       The returned records are actual satellite
-       fire detections.
-    */
+        "https://api.open-meteo.com/v1/forecast" +
 
-    const url =
+        "?latitude=" +
+        encodeURIComponent(lat) +
 
-        FIRMS_API_BASE +
+        "&longitude=" +
+        encodeURIComponent(lon) +
 
-        encodeURIComponent(key) +
+        "&current=" +
 
-        "/VIIRS_NOAA20_NRT/world/" +
+        "temperature_2m," +
+        "relative_humidity_2m," +
+        "wind_speed_10m," +
+        "wind_direction_10m," +
+        "precipitation" +
 
-        (
-            hours <= 24
-            ? 1
-            : hours <= 48
-            ? 2
-            : 3
-        );
+        "&timezone=auto";
+
+
+    const elevationURL =
+
+        "https://api.open-meteo.com/v1/elevation" +
+
+        "?latitude=" +
+        encodeURIComponent(lat) +
+
+        "&longitude=" +
+        encodeURIComponent(lon);
 
 
     try{
 
         const response =
-            await fetch(
-                url
-            );
+            await Promise.all([
+                fetch(weatherURL),
+                fetch(elevationURL)
+            ]);
 
 
-        if(!response.ok){
+        if(
+            !response[0].ok ||
+            !response[1].ok
+        ){
 
             throw new Error(
-                "NASA FIRMS HTTP " +
-                response.status
+                "Live API request failed"
             );
 
         }
 
 
-        const csv =
-            await response.text();
+        const weather =
+            await response[0].json();
 
 
-        const data =
-            parseCSV(csv);
+        const elevationData =
+            await response[1].json();
 
 
-        if(!data.length){
-
-            clearFireMarkers();
-
-            document
-                .getElementById(
-                    "fireCount"
-                )
-                .textContent =
-                "0";
+        const current =
+            weather.current;
 
 
-            document
-                .getElementById(
-                    "highConfidence"
-                )
-                .textContent =
-                "0";
-
-
-            setStatus(
-                "NASA returned no fire detections for the requested period.",
-                "ok"
+        const temperature =
+            Number(
+                current.temperature_2m
             );
 
-            return;
 
-        }
-
-
-        allFireData =
-            data;
+        const humidity =
+            Number(
+                current.relative_humidity_2m
+            );
 
 
-        drawRealFires(
-            data
+        const wind =
+            Number(
+                current.wind_speed_10m
+            );
+
+
+        const direction =
+            Number(
+                current.wind_direction_10m
+            );
+
+
+        const precipitation =
+            Number(
+                current.precipitation
+            );
+
+
+        const elevation =
+            Number(
+                elevationData.elevation[0]
+            );
+
+
+        latestWeather = {
+
+            temperature,
+            humidity,
+            wind,
+            direction,
+            precipitation,
+            elevation
+
+        };
+
+
+        document
+            .getElementById("temperature")
+            .textContent =
+            temperature.toFixed(1) +
+            " °C";
+
+
+        document
+            .getElementById("wind")
+            .textContent =
+            wind.toFixed(1) +
+            " km/h";
+
+
+        document
+            .getElementById("humidity")
+            .textContent =
+            humidity +
+            " %";
+
+
+        document
+            .getElementById("elevation")
+            .textContent =
+            Math.round(
+                elevation
+            ) +
+            " m";
+
+
+        document
+            .getElementById("windDirection")
+            .textContent =
+            direction +
+            "°";
+
+
+        document
+            .getElementById("precipitation")
+            .textContent =
+            precipitation.toFixed(1) +
+            " mm";
+
+
+        /*
+            Environmental fire-risk score.
+        */
+
+        calculateFireRisk(
+            temperature,
+            humidity,
+            wind,
+            precipitation
         );
-
-
-        calculateEarliestDetectedPoints(
-            data
-        );
-
-
-        document
-            .getElementById(
-                "fireCount"
-            )
-            .textContent =
-            data.length.toLocaleString();
-
-
-        const high =
-            data.filter(
-                fire =>
-                    isHighConfidence(
-                        fire.confidence
-                    )
-            ).length;
-
-
-        document
-            .getElementById(
-                "highConfidence"
-            )
-            .textContent =
-            high.toLocaleString();
-
-
-        const now =
-            new Date();
-
-
-        document
-            .getElementById(
-                "lastUpdate"
-            )
-            .textContent =
-            now.toLocaleTimeString();
 
 
         setStatus(
-            "Live NASA FIRMS fire detections loaded.",
+            "Live environmental data loaded.",
             "ok"
         );
+
 
     }
     catch(error){
 
         console.error(error);
 
-
         setStatus(
-
-            "NASA FIRMS could not be loaded. Check your MAP_KEY and internet connection.",
-
+            "Could not load live weather data.",
             "error"
-
         );
 
     }
@@ -1358,933 +1537,844 @@ async function loadRealFires(){
 
 
 /* =========================================================
-   CSV PARSER
+   FIRE-RISK ESTIMATE
 ========================================================= */
 
-function parseCSV(csv){
+function calculateFireRisk(
+    temperature,
+    humidity,
+    wind,
+    precipitation
+){
 
-    const lines =
-        csv
-            .trim()
-            .split(/\r?\n/);
+    /*
+        This is an ENVIRONMENTAL RISK SCORE.
+
+        It is deliberately NOT labelled as a
+        probability of ignition.
+
+        Higher temperature + low humidity +
+        strong wind + little rain = higher risk.
+    */
 
 
-    if(lines.length < 2){
+    let score = 0;
 
-        return [];
+
+    /* Temperature */
+
+    if(temperature >= 42){
+
+        score += 35;
+
+    }
+    else if(temperature >= 37){
+
+        score += 28;
+
+    }
+    else if(temperature >= 32){
+
+        score += 20;
+
+    }
+    else if(temperature >= 27){
+
+        score += 10;
+
+    }
+    else{
+
+        score += 2;
 
     }
 
 
-    const headers =
-        parseCSVLine(
-            lines[0]
-        );
+    /* Humidity */
+
+    if(humidity <= 15){
+
+        score += 30;
+
+    }
+    else if(humidity <= 25){
+
+        score += 24;
+
+    }
+    else if(humidity <= 35){
+
+        score += 15;
+
+    }
+    else if(humidity <= 50){
+
+        score += 6;
+
+    }
 
 
-    const records = [];
+    /* Wind */
+
+    if(wind >= 45){
+
+        score += 25;
+
+    }
+    else if(wind >= 30){
+
+        score += 18;
+
+    }
+    else if(wind >= 20){
+
+        score += 10;
+
+    }
+    else if(wind >= 10){
+
+        score += 4;
+
+    }
 
 
-    for(
-        let i = 1;
-        i < lines.length;
-        i++
-    ){
+    /* Rain reduces immediate environmental risk */
 
-        const values =
-            parseCSVLine(
-                lines[i]
-            );
+    if(precipitation >= 5){
 
+        score -= 25;
 
-        if(
-            values.length !==
-            headers.length
-        ){
+    }
+    else if(precipitation >= 2){
 
-            continue;
+        score -= 15;
 
-        }
+    }
+    else if(precipitation >= .5){
+
+        score -= 5;
+
+    }
 
 
-        const obj = {};
-
-
-        headers.forEach(
-            (
-                header,
-                index
-            ) => {
-
-                obj[header] =
-                    values[index];
-
-            }
-        );
-
-
-        records.push(
-            normalizeFire(
-                obj
+    score =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                Math.round(score)
             )
         );
 
+
+    let label;
+    let color;
+    let description;
+
+
+    if(score >= 70){
+
+        label =
+            "VERY HIGH";
+
+        color =
+            "rgba(255,59,48,.58)";
+
+        description =
+            "Very hot/dry/windy conditions. Environmental fire risk is elevated.";
+
     }
+    else if(score >= 45){
 
+        label =
+            "ELEVATED";
 
-    return records;
+        color =
+            "rgba(255,138,33,.60)";
 
-}
+        description =
+            "Hot or dry conditions are present. Fire risk is elevated but not classified as very high.";
 
+    }
+    else{
 
-/* =========================================================
-   CSV LINE PARSER
-========================================================= */
+        label =
+            "LOW";
 
-function parseCSVLine(line){
+        color =
+            "rgba(49,219,119,.38)";
 
-    const result = [];
-
-    let current = "";
-
-    let insideQuotes =
-        false;
-
-
-    for(
-        let i = 0;
-        i < line.length;
-        i++
-    ){
-
-        const char =
-            line[i];
-
-
-        if(
-            char === '"'
-        ){
-
-            if(
-                insideQuotes &&
-                line[i + 1] === '"'
-            ){
-
-                current += '"';
-
-                i++;
-
-            }
-            else{
-
-                insideQuotes =
-                    !insideQuotes;
-
-            }
-
-        }
-        else if(
-            char === "," &&
-            !insideQuotes
-        ){
-
-            result.push(
-                current
-            );
-
-            current = "";
-
-        }
-        else{
-
-            current +=
-                char;
-
-        }
+        description =
+            "Current environmental conditions indicate comparatively lower fire risk.";
 
     }
 
 
-    result.push(
-        current
-    );
+    document
+        .getElementById("riskScore")
+        .textContent =
+        score;
 
 
-    return result;
+    document
+        .getElementById("riskDescription")
+        .textContent =
+        label +
+        " — " +
+        description;
 
-}
 
+    const fill =
+        document
+            .getElementById("riskFill");
 
-/* =========================================================
-   NORMALIZE RECORD
-========================================================= */
 
-function normalizeFire(record){
+    fill.style.width =
+        score +
+        "%";
 
-    return {
 
-        latitude:
-            Number(
-                record.latitude
-            ),
-
-        longitude:
-            Number(
-                record.longitude
-            ),
-
-        bright:
-            Number(
-                record.bright_ti4 ||
-                0
-            ),
-
-        scan:
-            Number(
-                record.scan ||
-                0
-            ),
-
-        track:
-            Number(
-                record.track ||
-                0
-            ),
-
-        date:
-            record.acq_date ||
-            "",
-
-        time:
-            record.acq_time ||
-            "",
-
-        satellite:
-            record.satellite ||
-            "VIIRS",
-
-        instrument:
-            record.instrument ||
-            "VIIRS",
-
-        confidence:
-            record.confidence ||
-            "",
-
-        frp:
-            Number(
-                record.frp ||
-                0
-            ),
-
-        daynight:
-            record.daynight ||
-            ""
-
-    };
-
-}
-
-
-/* =========================================================
-   CONFIDENCE
-========================================================= */
-
-function isHighConfidence(
-    confidence
-){
-
-    const value =
-        String(
-            confidence
-        )
-        .toLowerCase()
-        .trim();
-
-
-    if(
-        value === "h" ||
-        value === "high"
-    ){
-
-        return true;
-
-    }
-
-
-    const number =
-        Number(
-            confidence
-        );
-
-
-    return (
-        !isNaN(number) &&
-        number >= 80
-    );
-
-}
-
-
-/* =========================================================
-   DRAW ACTUAL FIRE DETECTIONS
-========================================================= */
-
-function drawRealFires(
-    fires
-){
-
-    clearFireMarkers();
-
-
-    const limited =
-        fires.slice(
-            0,
-            MAX_FIRE_MARKERS
-        );
-
-
-    limited.forEach(
-        function(fire){
-
-            if(
-                !Number.isFinite(
-                    fire.latitude
-                ) ||
-                !Number.isFinite(
-                    fire.longitude
-                )
-            ){
-
-                return;
-
-            }
-
-
-            const marker =
-                L.marker(
-
-                    [
-                        fire.latitude,
-                        fire.longitude
-                    ],
-
-                    {
-                        icon:
-                            createFireIcon()
-                    }
-
-                ).addTo(map);
-
-
-            marker.bindPopup(
-
-                "<b>NASA DETECTED ACTIVE FIRE</b><br><br>" +
-
-                "Latitude: " +
-                fire.latitude.toFixed(4) +
-                "<br>" +
-
-                "Longitude: " +
-                fire.longitude.toFixed(4) +
-                "<br>" +
-
-                "Detection: " +
-                fire.date +
-                " " +
-                formatAcqTime(
-                    fire.time
-                ) +
-                " UTC<br>" +
-
-                "Confidence: " +
-                fire.confidence +
-                "<br>" +
-
-                "Fire Radiative Power: " +
-                fire.frp +
-                " MW<br>" +
-
-                "Satellite: " +
-                fire.satellite +
-                "<br>" +
-
-                "<br><span style='color:#ff7a18'>" +
-                "REAL SATELLITE DETECTION" +
-                "</span>"
-
-            );
-
-
-            marker.on(
-                "click",
-                function(){
-
-                    showSelectedFire(
-                        fire,
-                        "NASA DETECTED FIRE"
-                    );
-
-                }
-            );
-
-
-            fireMarkers.push(
-                marker
-            );
-
-        }
-    );
-
-
-    if(limited.length > 0){
-
-        const bounds =
-            L.latLngBounds(
-                limited.map(
-                    fire => [
-                        fire.latitude,
-                        fire.longitude
-                    ]
-                )
-            );
-
-
-        map.fitBounds(
-            bounds,
-            {
-                padding:
-                    [30,30]
-            }
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   "START POINT" / EARLIEST DETECTED POINT
-========================================================= */
-
-/*
-   Important:
-
-   NASA fire detections do NOT normally tell us the
-   exact ignition/start of a wildfire.
-
-   We therefore cluster nearby detections and identify
-   the earliest satellite-observed detection in each
-   cluster.
-
-   That is marked "EARLIEST DETECTED POINT",
-   NOT "CONFIRMED IGNITION POINT".
-*/
-
-function calculateEarliestDetectedPoints(
-    fires
-){
-
-    startMarkers.forEach(
-        marker => {
-
-            map.removeLayer(
-                marker
-            );
-
-        }
-    );
-
-    startMarkers = [];
-
-
-    const sorted =
-        [...fires].sort(
-            (
-                a,
-                b
-            ) =>
-                getTimestamp(a) -
-                getTimestamp(b)
-        );
-
-
-    const clusters = [];
+    fill.style.background =
+        color;
 
 
     /*
-       Approximately 2 km spatial clustering.
+        IMPORTANT:
 
-       This is a prototype heuristic.
+        We are not claiming that this score means
+        "70% chance of fire".
     */
 
-    const CLUSTER_DISTANCE_KM =
-        2;
+
+    updateRiskMarkerColor(
+        score
+    );
+
+}
 
 
-    sorted.forEach(
-        function(fire){
+/* =========================================================
+   COLOR SELECTED MARKER
+========================================================= */
 
-            let assigned =
-                false;
+function updateRiskMarkerColor(
+    score
+){
 
+    if(!selectedMarker){
 
-            for(
-                const cluster
-                of clusters
-            ){
+        return;
 
-                const distance =
-                    haversineDistance(
-                        fire.latitude,
-                        fire.longitude,
-                        cluster.center.latitude,
-                        cluster.center.longitude
-                    );
+    }
 
 
-                if(
-                    distance <=
-                    CLUSTER_DISTANCE_KM
-                ){
+    let color =
+        "#31db77";
 
-                    cluster.fires.push(
-                        fire
-                    );
+
+    if(score >= 70){
+
+        color =
+            "#ff3b30";
+
+    }
+    else if(score >= 45){
+
+        color =
+            "#ff8a21";
+
+    }
+
+
+    selectedMarker.setStyle({
+
+        fillColor:
+            color,
+
+        color:
+            "#ffffff"
+
+    });
+
+}
+
+
+/* =========================================================
+   GLOBAL WEATHER-RISK GRID
+========================================================= */
+
+async function updateGlobalRiskGrid(){
+
+    clearRiskGrid();
+
+
+    const step =
+        Number(
+            document
+                .getElementById(
+                    "gridResolution"
+                )
+                .value
+        );
+
+
+    setStatus(
+        "Building live environmental risk map..."
+    );
+
+
+    /*
+        Create global grid points.
+
+        The grid is deliberately coarse so that
+        it can be updated in a browser without
+        overwhelming the public weather API.
+
+        Clicking a location gives exact weather.
+    */
+
+    const points = [];
+
+
+    for(
+        let lat = -60;
+        lat <= 70;
+        lat += step
+    ){
+
+        for(
+            let lon = -180;
+            lon < 180;
+            lon += step
+        ){
+
+            points.push({
+                lat,
+                lon
+            });
+
+        }
+
+    }
+
+
+    /*
+        Request in batches because Open-Meteo supports
+        multiple comma-separated coordinates.
+    */
+
+    const batchSize = 40;
+
+
+    for(
+        let start = 0;
+        start < points.length;
+        start += batchSize
+    ){
+
+        const batch =
+            points.slice(
+                start,
+                start + batchSize
+            );
+
+
+        const lats =
+            batch
+                .map(
+                    p =>
+                        p.lat
+                )
+                .join(",");
+
+
+        const lons =
+            batch
+                .map(
+                    p =>
+                        p.lon
+                )
+                .join(",");
+
+
+        const url =
+
+            "https://api.open-meteo.com/v1/forecast" +
+
+            "?latitude=" +
+            lats +
+
+            "&longitude=" +
+            lons +
+
+            "&current=" +
+            "temperature_2m," +
+            "relative_humidity_2m," +
+            "wind_speed_10m," +
+            "precipitation" +
+
+            "&timezone=auto";
+
+
+        try{
+
+            const response =
+                await fetch(
+                    url
+                );
+
+
+            if(!response.ok){
+
+                continue;
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            const locations =
+                Array.isArray(result)
+                ? result
+                : [result];
+
+
+            locations.forEach(
+                function(weather,index){
+
+                    const point =
+                        batch[index];
+
+
+                    if(!point){
+
+                        return;
+
+                    }
+
+
+                    if(
+                        !weather.current
+                    ){
+
+                        return;
+
+                    }
+
+
+                    const temperature =
+                        Number(
+                            weather
+                                .current
+                                .temperature_2m
+                        );
+
+
+                    const humidity =
+                        Number(
+                            weather
+                                .current
+                                .relative_humidity_2m
+                        );
+
+
+                    const wind =
+                        Number(
+                            weather
+                                .current
+                                .wind_speed_10m
+                        );
+
+
+                    const precipitation =
+                        Number(
+                            weather
+                                .current
+                                .precipitation
+                        );
+
+
+                    const score =
+                        calculateRiskScoreOnly(
+                            temperature,
+                            humidity,
+                            wind,
+                            precipitation
+                        );
 
 
                     /*
-                       Update cluster center
+                        Render only cells that look like land-ish
+                        regions using a simple heuristic that avoids
+                        most polar/ocean clutter.
+
+                        Exact selected-location weather remains available
+                        everywhere by clicking.
                     */
 
-                    const count =
-                        cluster.fires.length;
+                    if(
+                        Math.abs(
+                            point.lat
+                        ) > 70
+                    ){
 
+                        return;
 
-                    cluster.center.latitude =
-                        cluster.center.latitude +
-                        (
-                            fire.latitude -
-                            cluster.center.latitude
-                        ) / count;
-
-
-                    cluster.center.longitude =
-                        cluster.center.longitude +
-                        (
-                            fire.longitude -
-                            cluster.center.longitude
-                        ) / count;
-
-
-                    assigned =
-                        true;
-
-                    break;
-
-                }
-
-            }
-
-
-            if(!assigned){
-
-                clusters.push({
-
-                    center: {
-                        latitude:
-                            fire.latitude,
-
-                        longitude:
-                            fire.longitude
-                    },
-
-                    fires:
-                        [fire]
-
-                });
-
-            }
-
-        }
-    );
-
-
-    clusters.forEach(
-        function(cluster){
-
-            const earliest =
-                cluster.fires
-                    .sort(
-                        (
-                            a,
-                            b
-                        ) =>
-                            getTimestamp(a) -
-                            getTimestamp(b)
-                    )[0];
-
-
-            const marker =
-                L.marker(
-
-                    [
-                        earliest.latitude,
-                        earliest.longitude
-                    ],
-
-                    {
-                        icon:
-                            createStartIcon(),
-                        zIndexOffset:
-                            1000
                     }
 
-                ).addTo(map);
 
+                    drawRiskCell(
+                        point.lat,
+                        point.lon,
+                        step,
+                        score,
+                        temperature,
+                        humidity,
+                        wind
+                    );
 
-            marker.bindPopup(
-
-                "<b>EARLIEST DETECTED POINT</b><br><br>" +
-
-                "This is the earliest NASA FIRMS detection " +
-                "inside this nearby detection cluster.<br><br>" +
-
-                "Latitude: " +
-                earliest.latitude.toFixed(4) +
-                "<br>" +
-
-                "Longitude: " +
-                earliest.longitude.toFixed(4) +
-                "<br>" +
-
-                "First observed: " +
-                earliest.date +
-                " " +
-                formatAcqTime(
-                    earliest.time
-                ) +
-                " UTC<br>" +
-
-                "Satellite: " +
-                earliest.satellite +
-                "<br><br>" +
-
-                "<span style='color:#ffd400'>" +
-                "NOT a confirmed ignition point" +
-                "</span>"
-
-            );
-
-
-            startMarkers.push(
-                marker
+                }
             );
 
         }
-    );
+        catch(error){
 
-}
+            console.error(
+                "Risk batch failed:",
+                error
+            );
 
-
-/* =========================================================
-   TIMESTAMP
-========================================================= */
-
-function getTimestamp(
-    fire
-){
-
-    const date =
-        String(
-            fire.date
-        );
+        }
 
 
-    const time =
-        String(
-            fire.time
-        )
-        .padStart(
-            4,
-            "0"
-        );
+        /*
+            Small delay between batches.
+        */
 
+        await sleep(80);
 
-    const iso =
-        date +
-        "T" +
-        time.slice(0,2) +
-        ":" +
-        time.slice(2,4) +
-        ":00Z";
+    }
 
-
-    const timestamp =
-        Date.parse(
-            iso
-        );
-
-
-    return isNaN(timestamp)
-        ? 0
-        : timestamp;
-
-}
-
-
-/* =========================================================
-   ACQUISITION TIME
-========================================================= */
-
-function formatAcqTime(
-    value
-){
-
-    const text =
-        String(value)
-        .padStart(
-            4,
-            "0"
-        );
-
-
-    return (
-        text.slice(0,2) +
-        ":" +
-        text.slice(2,4)
-    );
-
-}
-
-
-/* =========================================================
-   HAVERSINE DISTANCE
-========================================================= */
-
-function haversineDistance(
-    lat1,
-    lon1,
-    lat2,
-    lon2
-){
-
-    const R =
-        6371;
-
-
-    const dLat =
-        (
-            lat2 -
-            lat1
-        ) *
-        Math.PI /
-        180;
-
-
-    const dLon =
-        (
-            lon2 -
-            lon1
-        ) *
-        Math.PI /
-        180;
-
-
-    const a =
-
-        Math.sin(
-            dLat / 2
-        ) *
-        Math.sin(
-            dLat / 2
-        )
-
-        +
-
-        Math.cos(
-            lat1 *
-            Math.PI /
-            180
-        ) *
-
-        Math.cos(
-            lat2 *
-            Math.PI /
-            180
-        ) *
-
-        Math.sin(
-            dLon / 2
-        ) *
-        Math.sin(
-            dLon / 2
-        );
-
-
-    const c =
-        2 *
-        Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1 - a)
-        );
-
-
-    return R * c;
-
-}
-
-
-/* =========================================================
-   SELECTED FIRE
-========================================================= */
-
-function showSelectedFire(
-    fire,
-    title
-){
 
     document
-        .getElementById(
-            "selectedFire"
-        )
-        .innerHTML =
-
-        "<div class='stat-title'>" +
-
-        title +
-
-        "</div>" +
-
-        "<div class='stat-grid'>" +
-
-        "<div class='stat'>" +
-
-        "<small>LATITUDE</small>" +
-
-        "<strong>" +
-
-        fire.latitude.toFixed(4) +
-
-        "</strong>" +
-
-        "</div>" +
+        .getElementById("refreshTime")
+        .textContent =
+        "Risk updated " +
+        new Date()
+            .toLocaleTimeString();
 
 
-        "<div class='stat'>" +
-
-        "<small>LONGITUDE</small>" +
-
-        "<strong>" +
-
-        fire.longitude.toFixed(4) +
-
-        "</strong>" +
-
-        "</div>" +
-
-
-        "<div class='stat'>" +
-
-        "<small>ACQUIRED</small>" +
-
-        "<strong>" +
-
-        fire.date +
-
-        "</strong>" +
-
-        "</div>" +
-
-
-        "<div class='stat'>" +
-
-        "<small>TIME UTC</small>" +
-
-        "<strong>" +
-
-        formatAcqTime(
-            fire.time
-        ) +
-
-        "</strong>" +
-
-        "</div>" +
-
-
-        "<div class='stat'>" +
-
-        "<small>CONFIDENCE</small>" +
-
-        "<strong>" +
-
-        fire.confidence +
-
-        "</strong>" +
-
-        "</div>" +
-
-
-        "<div class='stat'>" +
-
-        "<small>FRP</small>" +
-
-        "<strong>" +
-
-        fire.frp +
-
-        " MW" +
-
-        "</strong>" +
-
-        "</div>" +
-
-        "</div>";
+    setStatus(
+        "Live environmental risk grid updated.",
+        "ok"
+    );
 
 }
 
 
 /* =========================================================
-   REFRESH
+   RISK SCORE ONLY
 ========================================================= */
 
-function refreshFires(){
+function calculateRiskScoreOnly(
+    temperature,
+    humidity,
+    wind,
+    precipitation
+){
 
-    loadRealFires();
+    let score = 0;
+
+
+    if(temperature >= 42){
+
+        score += 35;
+
+    }
+    else if(temperature >= 37){
+
+        score += 28;
+
+    }
+    else if(temperature >= 32){
+
+        score += 20;
+
+    }
+    else if(temperature >= 27){
+
+        score += 10;
+
+    }
+    else{
+
+        score += 2;
+
+    }
+
+
+    if(humidity <= 15){
+
+        score += 30;
+
+    }
+    else if(humidity <= 25){
+
+        score += 24;
+
+    }
+    else if(humidity <= 35){
+
+        score += 15;
+
+    }
+    else if(humidity <= 50){
+
+        score += 6;
+
+    }
+
+
+    if(wind >= 45){
+
+        score += 25;
+
+    }
+    else if(wind >= 30){
+
+        score += 18;
+
+    }
+    else if(wind >= 20){
+
+        score += 10;
+
+    }
+    else if(wind >= 10){
+
+        score += 4;
+
+    }
+
+
+    if(precipitation >= 5){
+
+        score -= 25;
+
+    }
+    else if(precipitation >= 2){
+
+        score -= 15;
+
+    }
+    else if(precipitation >= .5){
+
+        score -= 5;
+
+    }
+
+
+    return Math.max(
+        0,
+        Math.min(
+            100,
+            Math.round(score)
+        )
+    );
 
 }
 
 
-/*
-   NASA FIRMS WMS data are updated frequently.
-   Refresh every 15 minutes when a key is available.
-*/
+/* =========================================================
+   DRAW RISK CELL
+========================================================= */
 
-setInterval(
-    function(){
+function drawRiskCell(
+    lat,
+    lon,
+    step,
+    score,
+    temperature,
+    humidity,
+    wind
+){
 
-        const key =
-            document
-                .getElementById(
-                    "mapKey"
-                )
-                .value
-                .trim();
+    let fillColor;
+
+    let fillOpacity;
 
 
-        if(key){
+    /*
+        GREEN:
+        lower environmental risk.
+    */
 
-            loadRealFires();
+    if(score < 45){
 
-        }
+        fillColor =
+            "#31db77";
 
-    },
-    15 * 60 * 1000
-);
+        fillOpacity =
+            0.11;
+
+    }
+
+    /*
+        ORANGE:
+        hot/dry/elevated but not very high.
+    */
+
+    else if(score < 70){
+
+        fillColor =
+            "#ff8a21";
+
+        fillOpacity =
+            0.20;
+
+    }
+
+    /*
+        TRANSPARENT RED:
+        very high environmental risk.
+    */
+
+    else{
+
+        fillColor =
+            "#ff3b30";
+
+        fillOpacity =
+            0.25;
+
+    }
+
+
+    /*
+        Cell bounds.
+
+        Half-cell around the weather sample.
+    */
+
+    const half =
+        step / 2;
+
+
+    const bounds = [
+
+        [
+            lat - half,
+            lon - half
+        ],
+
+        [
+            lat + half,
+            lon + half
+        ]
+
+    ];
+
+
+    const rect =
+        L.rectangle(
+            bounds,
+            {
+                color:
+                    fillColor,
+
+                fillColor:
+                    fillColor,
+
+                fillOpacity:
+                    fillOpacity,
+
+                weight:
+                    0.4,
+
+                opacity:
+                    0.18,
+
+                interactive:
+                    true
+            }
+        )
+        .addTo(map);
+
+
+    rect.bindPopup(
+
+        "<b>ENVIRONMENTAL FIRE RISK</b><br><br>" +
+
+        "Risk score: " +
+        score +
+        "/100<br>" +
+
+        "Temperature: " +
+        temperature.toFixed(1) +
+        " °C<br>" +
+
+        "Humidity: " +
+        humidity +
+        " %<br>" +
+
+        "Wind: " +
+        wind.toFixed(1) +
+        " km/h<br><br>" +
+
+        "<span style='color:#ff8a21'>" +
+
+        (
+            score >= 70
+            ? "VERY HIGH"
+            : score >= 45
+            ? "ELEVATED"
+            : "LOW"
+        ) +
+
+        " ENVIRONMENTAL RISK" +
+
+        "</span><br><br>" +
+
+        "<small>" +
+        "This is a weather-based estimate, not a confirmed fire detection." +
+        "</small>"
+
+    );
+
+
+    riskLayers.push(
+        rect
+    );
+
+}
 
 
 /* =========================================================
-   USER LOCATION
+   CLEAR RISK GRID
+========================================================= */
+
+function clearRiskGrid(){
+
+    riskLayers.forEach(
+        layer => {
+
+            map.removeLayer(
+                layer
+            );
+
+        }
+    );
+
+
+    riskLayers = [];
+
+}
+
+
+/* =========================================================
+   LOCATION BUTTON
 ========================================================= */
 
 function locateUser(){
@@ -2312,14 +2402,27 @@ function locateUser(){
         .geolocation
         .getCurrentPosition(
 
-            function(position){
+            async function(position){
+
+                const lat =
+                    position.coords.latitude;
+
+                const lon =
+                    position.coords.longitude;
+
 
                 map.setView(
                     [
-                        position.coords.latitude,
-                        position.coords.longitude
+                        lat,
+                        lon
                     ],
-                    9
+                    7
+                );
+
+
+                await handleMapClick(
+                    lat,
+                    lon
                 );
 
             },
@@ -2327,7 +2430,7 @@ function locateUser(){
             function(){
 
                 setStatus(
-                    "Location permission unavailable.",
+                    "Location permission was unavailable.",
                     "error"
                 );
 
@@ -2339,12 +2442,175 @@ function locateUser(){
 
 
 /* =========================================================
-   INITIAL VIEW
+   RESET
 ========================================================= */
 
-setStatus(
-    "Enter your NASA FIRMS MAP_KEY and load live fires."
-);
+function resetMap(){
+
+    map.setView(
+        DEFAULT_CENTER,
+        3
+    );
+
+
+    clearRiskGrid();
+
+
+    if(selectedMarker){
+
+        map.removeLayer(
+            selectedMarker
+        );
+
+        selectedMarker =
+            null;
+
+    }
+
+
+    document
+        .getElementById(
+            "temperature"
+        )
+        .textContent =
+        "—";
+
+
+    document
+        .getElementById(
+            "wind"
+        )
+        .textContent =
+        "—";
+
+
+    document
+        .getElementById(
+            "humidity"
+        )
+        .textContent =
+        "—";
+
+
+    document
+        .getElementById(
+            "elevation"
+        )
+        .textContent =
+        "—";
+
+
+    document
+        .getElementById(
+            "windDirection"
+        )
+        .textContent =
+        "—";
+
+
+    document
+        .getElementById(
+            "precipitation"
+        )
+        .textContent =
+        "—";
+
+
+    document
+        .getElementById(
+            "riskScore"
+        )
+        .textContent =
+        "—";
+
+
+    document
+        .getElementById(
+            "riskDescription"
+        )
+        .textContent =
+        "Click a location to calculate environmental fire risk.";
+
+
+    document
+        .getElementById(
+            "riskFill"
+        )
+        .style.width =
+        "0%";
+
+
+    setStatus(
+        "World view reset."
+    );
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function sleep(ms){
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                ms
+            )
+    );
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+document
+    .getElementById(
+        "loadRiskBtn"
+    )
+    .addEventListener(
+        "click",
+        updateGlobalRiskGrid
+    );
+
+
+document
+    .getElementById(
+        "locateBtn"
+    )
+    .addEventListener(
+        "click",
+        locateUser
+    );
+
+
+document
+    .getElementById(
+        "resetBtn"
+    )
+    .addEventListener(
+        "click",
+        resetMap
+    );
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initMap();
+
+
+/*
+    Load a moderate-resolution global risk grid
+    automatically.
+*/
+
+updateGlobalRiskGrid();
 
 </script>
 
