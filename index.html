@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FireGuard | Wildfire Emergency Intelligence</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #0b0f14;
+      color: #f5f5f5;
+      min-height: 100vh;
+    }
+
+    header {
+      height: 70px;
+      background: #111820;
+      border-bottom: 1px solid #27313b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 35px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: #ff4d22;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 21px;
+    }
+
+    .status {
+      color: #58d68d;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #58d68d;
+      border-radius: 50%;
+    }
+
+    main {
+      padding: 30px 35px;
+      max-width: 1500px;
+      margin: auto;
+    }
+
+    .hero {
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      margin-bottom: 7px;
+    }
+
+    .hero p {
+      color: #9ca8b3;
+      font-size: 15px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 22px;
+    }
+
+    .panel {
+      background: #111820;
+      border: 1px solid #27313b;
+      border-radius: 14px;
+      padding: 22px;
+    }
+
+    .panel h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    .input-group label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #c7d0d8;
+    }
+
+    .value {
+      color: #ff7048;
+      font-weight: 700;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #ff4d22;
+      cursor: pointer;
+    }
+
+    .simulate-btn {
+      width: 100%;
+      border: none;
+      background: #ff4d22;
+      color: white;
+      padding: 14px;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .simulate-btn:hover {
+      background: #ff633d;
+    }
+
+    .results {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .metric {
+      background: #161e27;
+      border: 1px solid #27313b;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .metric-title {
+      color: #9ca8b3;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .metric-value {
+      font-size: 27px;
+      font-weight: 700;
+    }
+
+    .risk {
+      color: #ff4d22;
+    }
+
+    .danger {
+      color: #ff7048;
+    }
+
+    .safe {
+      color: #58d68d;
+    }
+
+    .map {
+      height: 420px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid #27313b;
+      background:
+        linear-gradient(135deg, rgba(45,70,50,.8), rgba(18,35,27,.9)),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 45px,
+          rgba(255,255,255,.03) 46px
+        );
+    }
+
+    .map-title {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 5;
+      background: rgba(11,15,20,.85);
+      padding: 10px 13px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .fire-zone {
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      background: rgba(255, 61, 0, .22);
+      border: 2px solid #ff4d22;
+      border-radius: 50%;
+      left: 40%;
+      top: 33%;
+      box-shadow: 0 0 45px rgba(255,70,20,.3);
+    }
+
+    .fire {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      background: #ff4d22;
+      border-radius: 50%;
+      left: calc(40% + 66px);
+      top: calc(33% + 66px);
+      box-shadow: 0 0 30px #ff4d22;
+      z-index: 3;
+    }
+
+    .spread-zone {
+      position: absolute;
+      width: 320px;
+      height: 250px;
+      background: rgba(255, 160, 0, .09);
+      border: 2px dashed #ffad33;
+      border-radius: 50%;
+      left: 29%;
+      top: 22%;
+      transform: rotate(-15deg);
+    }
+
+    .route {
+      position: absolute;
+      width: 430px;
+      height: 5px;
+      background: #58d68d;
+      left: 23%;
+      top: 66%;
+      transform: rotate(-19deg);
+      transform-origin: left center;
+      box-shadow: 0 0 12px rgba(88,214,141,.5);
+      z-index: 4;
+    }
+
+    .route::after {
+      content: "SAFEST EVACUATION ROUTE";
+      position: absolute;
+      right: 5px;
+      top: -28px;
+      font-size: 11px;
+      color: #58d68d;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .safe-zone {
+      position: absolute;
+      right: 12%;
+      bottom: 17%;
+      width: 95px;
+      height: 70px;
+      border: 2px solid #58d68d;
+      background: rgba(88,214,141,.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #58d68d;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      z-index: 4;
+    }
+
+    .legend {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      background: rgba(11,15,20,.9);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      line-height: 1.9;
+    }
+
+    .legend span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .action-btn {
+      flex: 1;
+      border: 1px solid #384550;
+      background: #161e27;
+      color: white;
+      padding: 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .action-btn:hover {
+      border-color: #ff4d22;
+    }
+
+    .alert {
+      margin-top: 20px;
+      padding: 15px;
+      border-left: 4px solid #ff4d22;
+      background: rgba(255,77,34,.08);
+      border-radius: 8px;
+      color: #ffb09a;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .results {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 550px) {
+      header {
+        padding: 0 18px;
+      }
+
+      main {
+        padding: 20px 15px;
+      }
+
+      .results {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🔥</div>
+      FireGuard
+    </div>
+
+    <div class="status">
+      <div class="status-dot"></div>
+      SYSTEM ONLINE
+    </div>
+  </header>
+
+  <main>
+
+    <div class="hero">
+      <h1>Wildfire Intelligence Dashboard</h1>
+      <p>Predict wildfire risk, estimate spread, identify affected populations and determine safer evacuation routes.</p>
+    </div>
+
+    <div class="dashboard">
+
+      <!-- INPUT PANEL -->
+      <div class="panel">
+
+        <h2>Environmental Conditions</h2>
+
+        <div class="input-group">
+          <label>
+            Temperature
+            <span class="value" id="tempValue">38°C</span>
+          </label>
+          <input type="range" min="20" max="50" value="38"
+                 oninput="updateValue('temp', this.value)">
+        </div>
+
+        <div class="input-group">
+          <label>
+            Wind Speed
+            <span class="value" id="windValue">32 km/h</span>
+          </label>
+          <input type="range" min="0" max="70" value="32"
+                 oninput="updateValue('wind', this.value)">
+        </div>
+
+        <div class="input-group">
+          <label>
+            Humidity
+            <span class="value" id="humidityValue">25%</span>
+          </label>
+          <input type="range" min="5" max="90" value="25"
+                 oninput="updateValue('humidity', this.value)">
+        </div>
+
+        <div class="input-group">
+          <label>
+            Vegetation Dryness
+            <span class="value" id="vegetationValue">78%</span>
+          </label>
+          <input type="range" min="0" max="100" value="78"
+                 oninput="updateValue('vegetation', this.value)">
+        </div>
+
+        <div class="input-group">
+          <label>
+            Fire Intensity
+            <span class="value" id="intensityValue">72%</span>
+          </label>
+          <input type="range" min="0" max="100" value="72"
+                 oninput="updateValue('intensity', this.value)">
+        </div>
+
+        <button class="simulate-btn" onclick="simulateFire()">
+          Simulate Fire Spread
+        </button>
+
+      </div>
+
+
+      <!-- MAIN DASHBOARD -->
+      <div>
+
+        <div class="results">
+
+          <div class="metric">
+            <div class="metric-title">FIRE RISK</div>
+            <div class="metric-value risk" id="riskScore">HIGH</div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">PREDICTED SPREAD</div>
+            <div class="metric-value danger" id="spread">4.8 km</div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">POPULATION AT RISK</div>
+            <div class="metric-value" id="population">12,450</div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">EVACUATION ETA</div>
+            <div class="metric-value safe" id="eta">18 min</div>
+          </div>
+
+        </div>
+
+
+        <div class="map">
+
+          <div class="map-title">
+            LIVE FIRE SPREAD SIMULATION
+          </div>
+
+          <div class="spread-zone"></div>
+          <div class="fire-zone"></div>
+          <div class="fire"></div>
+
+          <div class="route"></div>
+
+          <div class="safe-zone">
+            SAFE<br>ZONE
+          </div>
+
+          <div class="legend">
+            <div><span style="background:#ff4d22"></span> Active Fire</div>
+            <div><span style="background:#ffad33"></span> Predicted Spread</div>
+            <div><span style="background:#58d68d"></span> Evacuation Route</div>
+          </div>
+
+        </div>
+
+
+        <div class="actions">
+
+          <button class="action-btn" onclick="simulateFire()">
+            Simulate Fire Spread
+          </button>
+
+          <button class="action-btn" onclick="findRoute()">
+            Find Safest Evacuation Route
+          </button>
+
+        </div>
+
+
+        <div class="alert" id="alert">
+          <strong>HIGH-RISK ALERT:</strong>
+          Current environmental conditions indicate a high probability of rapid wildfire spread.
+          Immediate evacuation planning is recommended for populations within the predicted spread zone.
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    let conditions = {
+      temp: 38,
+      wind: 32,
+      humidity: 25,
+      vegetation: 78,
+      intensity: 72
+    };
+
+
+    function updateValue(type, value) {
+
+      conditions[type] = Number(value);
+
+      const units = {
+        temp: "°C",
+        wind: " km/h",
+        humidity: "%",
+        vegetation: "%",
+        intensity: "%"
+      };
+
+      document.getElementById(type + "Value").innerText =
+        value + units[type];
+    }
+
+
+    function calculateRisk() {
+
+      let score = 0;
+
+      score += (conditions.temp - 20) * 1.2;
+      score += conditions.wind * 0.8;
+      score += (100 - conditions.humidity) * 0.7;
+      score += conditions.vegetation * 0.6;
+      score += conditions.intensity * 0.9;
+
+      return Math.min(100, Math.round(score / 4));
+    }
+
+
+    function simulateFire() {
+
+      const risk = calculateRisk();
+
+      let riskText = "LOW";
+
+      if (risk >= 70) {
+        riskText = "CRITICAL";
+      } else if (risk >= 50) {
+        riskText = "HIGH";
+      } else if (risk >= 30) {
+        riskText = "MODERATE";
+      }
+
+      document.getElementById("riskScore").innerText = riskText;
+
+      const spread =
+        (1.5 + conditions.wind * 0.045 + conditions.intensity * 0.025)
+        .toFixed(1);
+
+      document.getElementById("spread").innerText =
+        spread + " km";
+
+      const population =
+        Math.round(
+          2500 +
+          risk * 95 +
+          conditions.intensity * 35
+        );
+
+      document.getElementById("population").innerText =
+        population.toLocaleString();
+
+      const eta =
+        Math.max(
+          8,
+          Math.round(30 - conditions.wind * 0.15)
+        );
+
+      document.getElementById("eta").innerText =
+        eta + " min";
+
+      const alert = document.getElementById("alert");
+
+      if (risk >= 70) {
+
+        alert.innerHTML =
+          "<strong>CRITICAL ALERT:</strong> " +
+          "Extreme conditions indicate rapid wildfire propagation. " +
+          "Immediate evacuation planning is recommended.";
+
+      } else if (risk >= 50) {
+
+        alert.innerHTML =
+          "<strong>HIGH-RISK ALERT:</strong> " +
+          "Current conditions indicate a high probability of wildfire spread. " +
+          "Prepare evacuation routes for affected populations.";
+
+      } else {
+
+        alert.innerHTML =
+          "<strong>MONITORING:</strong> " +
+          "Current conditions indicate a lower wildfire threat. " +
+          "Continue monitoring environmental conditions.";
+      }
+    }
+
+
+    function findRoute() {
+
+      document.getElementById("eta").innerText = "14 min";
+
+      document.getElementById("alert").innerHTML =
+        "<strong>ROUTE OPTIMIZED:</strong> " +
+        "FireGuard has identified the safest available evacuation corridor " +
+        "outside the predicted spread zone. Estimated evacuation time: 14 minutes.";
+
+    }
+
+  </script>
+
+</body>
+</html>
