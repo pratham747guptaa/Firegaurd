@@ -7,821 +7,1669 @@
 <title>FIREGUARD | PS-01</title>
 
 <link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  crossorigin=""
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
 >
 
 <style>
-:root{
-  --bg:#060812;
-  --panel:#0c1020;
-  --border:#28334c;
-  --text:#edf2ff;
-  --muted:#8d99b7;
-  --yellow:#ffe600;
-  --cyan:#19d3ff;
-  --green:#45e08a;
-  --orange:#ff8a3d;
-  --red:#ff4d4d;
+
+/* =========================================================
+   FIREGUARD — GLOBAL STYLES
+========================================================= */
+
+:root {
+    --bg: #060812;
+    --bg2: #090d18;
+    --panel: #0c1220;
+    --panel2: #10182a;
+    --border: #27344d;
+
+    --text: #eef3ff;
+    --muted: #8995b2;
+
+    --yellow: #ffe600;
+    --cyan: #19d3ff;
+    --green: #45e08a;
+    --orange: #ff8a3d;
+    --red: #ff4d4d;
+
+    --blue: #5298ff;
 }
 
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 20% 0%,rgba(35,45,75,.28),transparent 35%),
-    var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+* {
+    box-sizing: border-box;
 }
 
-header{
-  height:70px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 26px;
-  background:#090d18;
-  border-bottom:1px solid var(--border);
+body {
+    margin: 0;
+    background:
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(40, 55, 90, 0.28),
+            transparent 38%
+        ),
+        var(--bg);
+
+    color: var(--text);
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
-.brand{
-  font-size:25px;
-  font-weight:900;
-  letter-spacing:3px;
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 26px;
+
+    background: var(--bg2);
+
+    border-bottom:
+        1px solid var(--border);
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.brand span{
-  color:var(--yellow);
+.brand {
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 3px;
 }
 
-.live{
-  font-size:11px;
-  color:var(--green);
-  border:1px solid #27563f;
-  background:#091812;
-  border-radius:999px;
-  padding:8px 12px;
+.brand span {
+    color: var(--yellow);
 }
 
-.wrap{
-  width:min(1500px,96vw);
-  margin:auto;
-  padding:18px 0 28px;
+.header-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
-h1{
-  margin:0;
-  font-size:28px;
+.status-pill {
+    font-size: 10px;
+    color: var(--green);
+
+    padding: 8px 12px;
+
+    border:
+        1px solid
+        #275a42;
+
+    border-radius: 999px;
+
+    background:
+        rgba(12, 35, 23, 0.75);
 }
 
-.subtitle{
-  margin:6px 0 18px;
-  color:var(--muted);
-  font-size:12px;
+.alert-pill {
+    display: none;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    padding: 8px 12px;
+
+    color: #fff;
+
+    border-radius: 999px;
+
+    background: var(--red);
+
+    animation:
+        pulse 1.3s
+        infinite;
 }
 
-.layout{
-  display:grid;
-  grid-template-columns:280px minmax(0,1fr) 305px;
-  gap:14px;
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   WRAPPER
+========================================================= */
+
+.wrap {
+    width: min(1500px, 96vw);
+    margin: auto;
+
+    padding:
+        18px
+        0
+        32px;
+}
+
+h1 {
+    margin: 0;
+
+    font-size: 28px;
+}
+
+.subtitle {
+    margin-top: 6px;
+    margin-bottom: 18px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.layout {
+    display: grid;
+
+    grid-template-columns:
+        275px
+        minmax(0, 1fr)
+        330px;
+
+    gap: 14px;
 }
 
 .panel,
 .map-panel,
-.metric{
-  background:linear-gradient(180deg,var(--panel),#080c18);
-  border:1px solid var(--border);
-  border-radius:10px;
+.metric {
+    background:
+        linear-gradient(
+            180deg,
+            var(--panel),
+            #080d18
+        );
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 10px;
 }
 
-.panel{
-  padding:15px;
+.panel {
+    padding: 15px;
 }
 
-h2{
-  margin:0 0 13px;
-  font-size:13px;
-  letter-spacing:1.1px;
+h2 {
+    margin:
+        0
+        0
+        13px;
+
+    font-size: 13px;
+
+    letter-spacing: 1px;
 }
 
-label{
-  display:block;
-  margin:11px 0 5px;
-  color:var(--muted);
-  font-size:11px;
+
+/* =========================================================
+   BUTTONS / INPUTS
+========================================================= */
+
+label {
+    display: block;
+
+    margin:
+        11px
+        0
+        5px;
+
+    color: var(--muted);
+
+    font-size: 10px;
 }
 
 input,
-select{
-  width:100%;
-  padding:9px 10px;
-  border-radius:6px;
-  border:1px solid #36405b;
-  background:#070b15;
-  color:var(--text);
+select {
+    width: 100%;
+
+    background: #070b14;
+
+    border:
+        1px solid
+        #36415d;
+
+    color: var(--text);
+
+    padding:
+        9px
+        10px;
+
+    border-radius: 6px;
 }
 
-button{
-  width:100%;
-  margin-top:12px;
-  padding:11px;
-  border-radius:7px;
-  font-weight:800;
-  cursor:pointer;
+button {
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 10px;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    cursor: pointer;
 }
 
-.primary{
-  border:0;
-  background:var(--yellow);
-  color:#111;
+.primary {
+    background: var(--yellow);
+
+    color: #111;
+
+    border: 0;
 }
 
-.secondary{
-  border:1px solid #3b4664;
-  background:#12192b;
-  color:#fff;
+.secondary {
+    background: #131a2c;
+
+    color: #fff;
+
+    border:
+        1px solid
+        #3c4867;
 }
 
-.note{
-  margin-top:12px;
-  color:#75819c;
-  font-size:10px;
-  line-height:1.5;
+.note {
+    margin-top: 11px;
+
+    color: #747f9b;
+
+    font-size: 9px;
+
+    line-height: 1.55;
 }
 
-.metrics{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-  margin-bottom:12px;
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 9px;
+
+    margin-bottom: 12px;
 }
 
-.metric{
-  padding:13px;
+.metric {
+    padding: 13px;
 }
 
-.metric small{
-  color:var(--muted);
-  font-size:10px;
+.metric small {
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 9px;
 }
 
-.metric strong{
-  display:block;
-  margin-top:6px;
-  font-size:23px;
+.metric strong {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 23px;
 }
 
-.progress{
-  margin-top:8px;
-  height:7px;
-  border-radius:99px;
-  background:#20293e;
-  overflow:hidden;
+.progress {
+    height: 7px;
+
+    margin-top: 8px;
+
+    border-radius: 999px;
+
+    background: #20283c;
+
+    overflow: hidden;
 }
 
-.progress-fill{
-  height:100%;
-  width:0%;
-  background:linear-gradient(
-    90deg,
-    var(--green),
-    var(--yellow),
-    var(--red)
-  );
-  transition:width .4s ease;
+.progress-fill {
+    height: 100%;
+
+    width: 0%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--green),
+            var(--yellow),
+            var(--red)
+        );
+
+    transition:
+        width
+        0.4s ease;
 }
 
-.map-panel{
-  padding:10px;
+
+/* =========================================================
+   MAP
+========================================================= */
+
+.map-panel {
+    padding: 10px;
 }
 
-#map{
-  height:535px;
-  border-radius:8px;
-  overflow:hidden;
+#map {
+    height: 530px;
+
+    border-radius: 8px;
+
+    overflow: hidden;
 }
 
-.legend{
-  display:flex;
-  flex-wrap:wrap;
-  gap:11px;
-  padding:9px 2px 1px;
-  color:var(--muted);
-  font-size:10px;
+.legend {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    padding:
+        9px
+        2px
+        1px;
+
+    color: var(--muted);
+
+    font-size: 9px;
 }
 
-.dot{
-  display:inline-block;
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  margin-right:4px;
+.dot {
+    display: inline-block;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    margin-right: 4px;
 }
 
-.data{
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  padding:10px 0;
-  border-bottom:1px solid #20283c;
-  font-size:11px;
+
+/* =========================================================
+   DATA STREAMS
+========================================================= */
+
+.data-stream {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 9px 0;
+
+    border-bottom:
+        1px solid
+        #202b40;
+
+    font-size: 10px;
 }
 
-.ready{color:var(--green)}
-.sim{color:var(--yellow)}
-.live-blue{color:var(--cyan)}
+.data-status {
+    font-size: 9px;
 
-.location-card{
-  margin-top:12px;
-  padding:11px;
-  border:1px solid #2a3550;
-  background:#080d18;
-  border-radius:7px;
+    font-weight: 800;
 }
 
-.location-title{
-  font-size:12px;
-  font-weight:800;
-  margin-bottom:9px;
+.ready {
+    color: var(--green);
 }
 
-.grid4{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
+.sim {
+    color: var(--yellow);
 }
 
-.info{
-  background:#0b101b;
-  border:1px solid #222c43;
-  border-radius:6px;
-  padding:9px;
+.blue {
+    color: var(--cyan);
 }
 
-.info small{
-  display:block;
-  color:#7f8aa5;
-  font-size:9px;
+
+/* =========================================================
+   SELECTED LOCATION
+========================================================= */
+
+.location-card {
+    margin-top: 11px;
+
+    padding: 10px;
+
+    border:
+        1px solid
+        #2a3651;
+
+    background:
+        #080e19;
+
+    border-radius: 7px;
 }
 
-.info strong{
-  display:block;
-  margin-top:4px;
-  font-size:17px;
+.location-title {
+    font-size: 11px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
 }
 
-.alert,
-.route{
-  margin-top:13px;
-  padding:11px;
-  border-radius:6px;
+.location-coords {
+    color: var(--muted);
+
+    font-size: 9px;
+
+    margin-bottom: 9px;
 }
 
-.alert{
-  background:#180d11;
-  border-left:4px solid var(--red);
+.info-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 7px;
 }
 
-.route{
-  background:#07151b;
-  border-left:4px solid var(--cyan);
+.info {
+    background:
+        #0b111d;
+
+    border:
+        1px solid
+        #222c43;
+
+    border-radius: 6px;
+
+    padding: 8px;
 }
 
-.small{
-  margin-top:5px;
-  color:#929db8;
-  font-size:10px;
-  line-height:1.5;
+.info small {
+    display: block;
+
+    color: #7d88a2;
+
+    font-size: 8px;
 }
 
-#status{
-  margin-top:10px;
-  font-size:10px;
-  color:var(--muted);
+.info strong {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 16px;
 }
 
-.status-ok{
-  color:var(--green)!important;
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.alert-box,
+.route-box,
+.resource-box {
+    margin-top: 12px;
+
+    padding: 11px;
+
+    border-radius: 7px;
 }
 
-.status-error{
-  color:var(--red)!important;
+.alert-box {
+    background:
+        #180d11;
+
+    border-left:
+        4px solid
+        var(--red);
 }
+
+.route-box {
+    background:
+        #07161c;
+
+    border-left:
+        4px solid
+        var(--cyan);
+}
+
+.resource-box {
+    background:
+        #0c1511;
+
+    border-left:
+        4px solid
+        var(--green);
+}
+
+.small {
+    margin-top: 5px;
+
+    color: #8f9ab4;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSE PRIORITY
+========================================================= */
+
+.priority {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    margin-top: 8px;
+
+    padding: 7px 8px;
+
+    border-radius: 5px;
+
+    background:
+        rgba(255,255,255,0.03);
+}
+
+.priority-label {
+    font-size: 9px;
+}
+
+.priority-value {
+    font-size: 9px;
+
+    font-weight: 900;
+}
+
+.critical {
+    color: var(--red);
+}
+
+.high {
+    color: var(--yellow);
+}
+
+.normal {
+    color: var(--green);
+}
+
+
+/* =========================================================
+   ROUTE COMPARISON
+========================================================= */
+
+.route-option {
+    margin-top: 8px;
+
+    padding: 8px;
+
+    background:
+        #0b111d;
+
+    border:
+        1px solid
+        #222d43;
+
+    border-radius: 5px;
+}
+
+.route-option.recommended {
+    border:
+        1px solid
+        var(--cyan);
+}
+
+.route-top {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    font-size: 9px;
+
+    font-weight: 800;
+}
+
+.route-values {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 4px;
+
+    margin-top: 6px;
+}
+
+.route-value {
+    color: var(--muted);
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   RESOURCE TABLE
+========================================================= */
+
+.resource-row {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        45px
+        45px;
+
+    gap: 5px;
+
+    padding:
+        7px
+        0;
+
+    border-bottom:
+        1px
+        solid
+        #202b40;
+
+    font-size: 9px;
+}
+
+.resource-row:last-child {
+    border-bottom: 0;
+}
+
+.resource-head {
+    color: var(--muted);
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+#status {
+    margin-top: 9px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+}
+
+.status-ok {
+    color: var(--green) !important;
+}
+
+.status-error {
+    color: var(--red) !important;
+}
+
+
+/* =========================================================
+   LEAFLET POPUP
+========================================================= */
 
 .leaflet-popup-content-wrapper,
-.leaflet-popup-tip{
-  background:#10162a;
-  color:#eef2ff;
+.leaflet-popup-tip {
+    background:
+        #10172a;
+
+    color:
+        #eef3ff;
 }
 
-.leaflet-popup-content{
-  font-size:11px;
-  line-height:1.55;
+.leaflet-popup-content {
+    font-size: 10px;
+
+    line-height: 1.55;
 }
 
-@media(max-width:1150px){
-  .layout{
-    grid-template-columns:1fr;
-  }
 
-  #map{
-    height:470px;
-  }
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-  .metrics{
-    grid-template-columns:repeat(2,1fr);
-  }
+@media(max-width: 1180px) {
+
+    .layout {
+        grid-template-columns:
+            1fr;
+    }
+
+    #map {
+        height: 480px;
+    }
+
+    .metrics {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
 <header>
 
-  <div class="brand">
-    FIRE<span>GUARD</span>
-  </div>
+    <div class="brand">
+        FIRE<span>GUARD</span>
+    </div>
 
-  <div class="live">
-    ● LIVE WEATHER + TERRAIN + NASA FIRE LAYER
-  </div>
+    <div class="header-right">
+
+        <div
+            class="alert-pill"
+            id="headerAlert"
+        >
+            ● EVACUATION WARNING
+        </div>
+
+        <div class="status-pill">
+            ● LIVE GEOSPATIAL SYSTEM
+        </div>
+
+    </div>
 
 </header>
 
 
+
 <div class="wrap">
 
-  <h1>
-    Predictive Wildfire Spread & Evacuation Routing
-  </h1>
 
-  <div class="subtitle">
-    PS-01 • Click any location to retrieve current weather,
-    elevation and satellite thermal-anomaly data
-  </div>
+    <h1>
+        Predictive Wildfire Spread & Evacuation Routing
+    </h1>
 
+    <div class="subtitle">
 
-  <div class="layout">
+        PS-01 • Live environmental monitoring • Fire-risk analysis •
+        Early warning • Dynamic evacuation • Resource prioritization
 
+    </div>
 
-    <!-- LEFT CONTROL PANEL -->
 
-    <aside class="panel">
+    <div class="layout">
 
-      <h2>
-        FIREGUARD ANALYSIS
-      </h2>
 
+        <!-- =================================================
+             LEFT CONTROL PANEL
+        ================================================== -->
 
-      <label>
-        Vegetation / Fuel Dryness
-      </label>
+        <aside class="panel">
 
-      <select id="dryness">
+            <h2>
+                FIREGUARD CONTROL
+            </h2>
 
-        <option value="1">
-          HIGH
-        </option>
 
-        <option value=".65">
-          MEDIUM
-        </option>
+            <label>
+                Vegetation / Fuel Dryness
+            </label>
 
-        <option value=".35">
-          LOW
-        </option>
+            <select id="dryness">
 
-      </select>
+                <option value="1">
+                    HIGH
+                </option>
 
+                <option value="0.65">
+                    MEDIUM
+                </option>
 
-      <label>
-        Topographical Fire Risk
-      </label>
+                <option value="0.35">
+                    LOW
+                </option>
 
-      <select id="terrainRisk">
+            </select>
 
-        <option value="1">
-          STEEP / HIGH
-        </option>
 
-        <option value=".7">
-          MIXED
-        </option>
+            <label>
+                Topographical Fire Risk
+            </label>
 
-        <option value=".4">
-          FLAT / LOW
-        </option>
+            <select id="terrainRisk">
 
-      </select>
+                <option value="1">
+                    STEEP / HIGH
+                </option>
 
+                <option value="0.7">
+                    MIXED
+                </option>
 
-      <label>
-        Satellite Fire Signal
-      </label>
+                <option value="0.4">
+                    FLAT / LOW
+                </option>
 
-      <select id="satSignal">
+            </select>
 
-        <option value="1">
-          ACTIVE HOTSPOT
-        </option>
 
-        <option value=".6">
-          MODERATE ANOMALY
-        </option>
+            <label>
+                Satellite Thermal Signal
+            </label>
 
-        <option value=".25">
-          LOW / NONE
-        </option>
+            <select id="satSignal">
 
-      </select>
+                <option value="1">
+                    ACTIVE HOTSPOT
+                </option>
 
+                <option value="0.6">
+                    MODERATE ANOMALY
+                </option>
 
-      <button
-        class="primary"
-        id="analyzeBtn"
-      >
-        ANALYZE SELECTED LOCATION
-      </button>
+                <option value="0.25">
+                    LOW / NONE
+                </option>
 
+            </select>
 
-      <button
-        class="secondary"
-        id="routeBtn"
-      >
-        GENERATE EVACUATION ROUTE
-      </button>
 
+            <label>
+                Population Density
+            </label>
 
-      <button
-        class="secondary"
-        id="locateBtn"
-      >
-        USE MY LOCATION
-      </button>
+            <select id="populationDensity">
 
+                <option value="1">
+                    HIGH
+                </option>
 
-      <div id="status">
-        Click anywhere on the map to begin.
-      </div>
+                <option value="0.7">
+                    MEDIUM
+                </option>
 
+                <option value="0.4">
+                    LOW
+                </option>
 
-      <div class="note">
-        Weather and elevation use live API data.
-        The satellite layer displays near-real-time
-        thermal anomalies. Fire-spread prediction and
-        evacuation routing remain prototype logic.
-      </div>
+            </select>
 
-    </aside>
 
+            <button
+                class="primary"
+                id="analyzeBtn"
+            >
+                ANALYZE SELECTED LOCATION
+            </button>
 
 
-    <!-- CENTER MAP -->
+            <button
+                class="secondary"
+                id="routeBtn"
+            >
+                GENERATE EVACUATION OPTIONS
+            </button>
 
-    <main>
 
-      <div class="metrics">
+            <button
+                class="secondary"
+                id="locateBtn"
+            >
+                USE MY LOCATION
+            </button>
 
 
-        <div class="metric">
+            <div id="status">
+                Click anywhere on the map to begin.
+            </div>
 
-          <small>
-            FIRE RISK
-          </small>
 
-          <strong id="risk">
-            —
-          </strong>
+            <div class="note">
 
-          <div class="progress">
+                Live weather/elevation are retrieved from
+                external geospatial APIs. Satellite fire
+                visualization is a NASA thermal-anomaly layer.
 
-            <div
-              class="progress-fill"
-              id="riskBar"
-            ></div>
+                Fire trajectory, evacuation optimization and
+                resource allocation are prototype logic.
 
-          </div>
+            </div>
 
-        </div>
+        </aside>
 
 
-        <div class="metric">
 
-          <small>
-            PREDICTED SPREAD
-          </small>
+        <!-- =================================================
+             CENTER
+        ================================================== -->
 
-          <strong id="spread">
-            —
-          </strong>
+        <main>
 
-        </div>
 
+            <!-- METRICS -->
 
-        <div class="metric">
+            <div class="metrics">
 
-          <small>
-            POPULATION AT RISK
-          </small>
 
-          <strong id="population">
-            —
-          </strong>
+                <div class="metric">
 
-        </div>
+                    <small>
+                        FIRE RISK
+                    </small>
 
+                    <strong id="risk">
+                        —
+                    </strong>
 
-        <div class="metric">
+                    <div class="progress">
 
-          <small>
-            DATA MODE
-          </small>
+                        <div
+                            class="progress-fill"
+                            id="riskBar"
+                        ></div>
 
-          <strong id="dataMode">
-            LIVE
-          </strong>
+                    </div>
 
-        </div>
+                </div>
 
-      </div>
 
+                <div class="metric">
 
-      <div class="map-panel">
+                    <small>
+                        PREDICTED SPREAD
+                    </small>
 
-        <h2>
-          LIVE GEOSPATIAL FIRE MAP
-        </h2>
+                    <strong id="spread">
+                        —
+                    </strong>
 
+                </div>
 
-        <div id="map"></div>
 
+                <div class="metric">
 
-        <div class="legend">
+                    <small>
+                        POPULATION AT RISK
+                    </small>
 
-          <span>
-            <i
-              class="dot"
-              style="background:#ff4d4d"
-            ></i>
-            Active fire / hotspot
-          </span>
+                    <strong id="population">
+                        —
+                    </strong>
 
-          <span>
-            <i
-              class="dot"
-              style="background:#ff8a3d"
-            ></i>
-            Projected spread
-          </span>
+                </div>
 
-          <span>
-            <i
-              class="dot"
-              style="background:#19d3ff"
-            ></i>
-            Evacuation route
-          </span>
 
-          <span>
-            <i
-              class="dot"
-              style="background:#45e08a"
-            ></i>
-            Safe zone
-          </span>
+                <div class="metric">
 
-        </div>
+                    <small>
+                        RESPONSE TIME
+                    </small>
 
-      </div>
+                    <strong id="responseTime">
+                        —
+                    </strong>
 
-    </main>
+                </div>
 
+            </div>
 
 
-    <!-- RIGHT DATA PANEL -->
 
-    <aside class="panel">
+            <!-- MAP -->
 
-      <h2>
-        SELECTED LOCATION
-      </h2>
+            <div class="map-panel">
 
-      <div class="small">
-        Click a location on the map.
-      </div>
+                <h2>
+                    LIVE GEOSPATIAL FIRE MAP
+                </h2>
 
 
-      <div class="location-card">
+                <div id="map"></div>
 
-        <div class="location-title">
-          LIVE ENVIRONMENTAL DATA
-        </div>
 
+                <div class="legend">
 
-        <div class="grid4">
+                    <span>
 
+                        <i
+                            class="dot"
+                            style="background:#ff4d4d"
+                        ></i>
 
-          <div class="info">
+                        Active thermal anomaly
 
-            <small>
-              TEMPERATURE
-            </small>
+                    </span>
 
-            <strong id="temperature">
-              —
-            </strong>
 
-          </div>
+                    <span>
 
+                        <i
+                            class="dot"
+                            style="background:#ff8a3d"
+                        ></i>
 
-          <div class="info">
+                        Predicted fire spread
 
-            <small>
-              WIND SPEED
-            </small>
+                    </span>
 
-            <strong id="wind">
-              —
-            </strong>
 
-          </div>
+                    <span>
 
+                        <i
+                            class="dot"
+                            style="background:#19d3ff"
+                        ></i>
 
-          <div class="info">
+                        Evacuation route
 
-            <small>
-              WIND DIRECTION
-            </small>
+                    </span>
 
-            <strong id="windDirection">
-              —
-            </strong>
 
-          </div>
+                    <span>
 
+                        <i
+                            class="dot"
+                            style="background:#45e08a"
+                        ></i>
 
-          <div class="info">
+                        Safe zone
 
-            <small>
-              HUMIDITY
-            </small>
+                    </span>
 
-            <strong id="humidity">
-              —
-            </strong>
+                </div>
 
-          </div>
+            </div>
 
 
-          <div class="info">
+        </main>
 
-            <small>
-              ELEVATION
-            </small>
 
-            <strong id="elevation">
-              —
-            </strong>
 
-          </div>
+        <!-- =================================================
+             RIGHT CONTROL CENTER
+        ================================================== -->
 
+        <aside class="panel">
 
-          <div class="info">
 
-            <small>
-              7-DAY TEMP AVG
-            </small>
+            <!-- LIVE DATA -->
 
-            <strong id="tempAvg7">
-              —
-            </strong>
+            <h2>
+                LIVE DATA STREAMS
+            </h2>
 
-          </div>
 
-        </div>
+            <div class="data-stream">
 
-      </div>
+                <span>
+                    NASA VIIRS thermal anomalies
+                </span>
 
+                <span
+                    class="data-status ready"
+                >
+                    LIVE
+                </span>
 
-      <div class="data">
+            </div>
 
-        <span>
-          Weather source
-        </span>
 
-        <span class="ready">
-          OPEN-METEO
-        </span>
+            <div class="data-stream">
 
-      </div>
+                <span>
+                    Current weather
+                </span>
 
+                <span
+                    class="data-status ready"
+                >
+                    LIVE
+                </span>
 
-      <div class="data">
+            </div>
 
-        <span>
-          Terrain source
-        </span>
 
-        <span class="ready">
-          COPERNICUS DEM
-        </span>
+            <div class="data-stream">
 
-      </div>
+                <span>
+                    Historical weather
+                </span>
 
+                <span
+                    class="data-status ready"
+                >
+                    LIVE
+                </span>
 
-      <div class="data">
+            </div>
 
-        <span>
-          Fire satellite layer
-        </span>
 
-        <span class="ready">
-          NASA VIIRS
-        </span>
+            <div class="data-stream">
 
-      </div>
+                <span>
+                    Terrain elevation
+                </span>
 
+                <span
+                    class="data-status ready"
+                >
+                    LIVE
+                </span>
 
-      <div class="data">
+            </div>
 
-        <span>
-          Map
-        </span>
 
-        <span class="live-blue">
-          OPENSTREETMAP
-        </span>
+            <div class="data-stream">
 
-      </div>
+                <span>
+                    Road network
+                </span>
 
+                <span
+                    class="data-status blue"
+                >
+                    MAP
+                </span>
 
-      <div class="alert">
+            </div>
 
-        <strong id="alertTitle">
-          NO ANALYSIS YET
-        </strong>
 
-        <div
-          class="small"
-          id="alertText"
-        >
-          Select a location and run the analysis.
-        </div>
+            <div class="data-stream">
 
-      </div>
+                <span>
+                    Population layer
+                </span>
 
+                <span
+                    class="data-status sim"
+                >
+                    PROTOTYPE
+                </span>
 
-      <div class="route">
+            </div>
 
-        <strong>
-          DYNAMIC EVACUATION
-        </strong>
 
-        <div
-          class="small"
-          id="routeText"
-        >
-          Select a location and generate
-          an evacuation route.
-        </div>
 
-      </div>
+            <!-- SELECTED LOCATION -->
 
-    </aside>
+            <div class="location-card">
 
-  </div>
+                <div class="location-title">
+                    SELECTED LOCATION
+                </div>
+
+
+                <div
+                    class="location-coords"
+                    id="coordinates"
+                >
+                    —
+                </div>
+
+
+                <div class="info-grid">
+
+
+                    <div class="info">
+
+                        <small>
+                            TEMPERATURE
+                        </small>
+
+                        <strong
+                            id="temperature"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            WIND
+                        </small>
+
+                        <strong
+                            id="wind"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            HUMIDITY
+                        </small>
+
+                        <strong
+                            id="humidity"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            ELEVATION
+                        </small>
+
+                        <strong
+                            id="elevation"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            WIND DIRECTION
+                        </small>
+
+                        <strong
+                            id="windDirection"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <small>
+                            7-DAY AVG
+                        </small>
+
+                        <strong
+                            id="tempAvg7"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- EARLY WARNING -->
+
+            <div class="alert-box">
+
+                <strong>
+                    <span id="alertTitle">
+                        EARLY WARNING
+                    </span>
+                </strong>
+
+
+                <div
+                    class="small"
+                    id="alertText"
+                >
+                    Select a location and run analysis
+                    to calculate the threat level.
+                </div>
+
+
+                <div class="priority">
+
+                    <span class="priority-label">
+                        RESPONSE PRIORITY
+                    </span>
+
+                    <span
+                        class="priority-value"
+                        id="priority"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="priority">
+
+                    <span class="priority-label">
+                        EST. WARNING WINDOW
+                    </span>
+
+                    <span
+                        class="priority-value"
+                        id="warningWindow"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- EVACUATION -->
+
+            <div class="route-box">
+
+                <strong>
+                    EVACUATION PATHS
+                </strong>
+
+
+                <div
+                    class="route-option recommended"
+                    id="routeA"
+                >
+
+                    <div class="route-top">
+
+                        <span>
+                            ROUTE A • RECOMMENDED
+                        </span>
+
+                        <span
+                            style="color:#45e08a"
+                        >
+                            LOW EXPOSURE
+                        </span>
+
+                    </div>
+
+
+                    <div class="route-values">
+
+                        <div class="route-value">
+                            DISTANCE
+                            <br>
+                            <strong id="routeADistance">
+                                —
+                            </strong>
+                        </div>
+
+
+                        <div class="route-value">
+                            ETA
+                            <br>
+                            <strong id="routeAEta">
+                                —
+                            </strong>
+                        </div>
+
+
+                        <div class="route-value">
+                            RISK
+                            <br>
+                            <strong id="routeARisk">
+                                —
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="route-option"
+                    id="routeB"
+                >
+
+                    <div class="route-top">
+
+                        <span>
+                            ROUTE B
+                        </span>
+
+                        <span
+                            style="color:#ffd34e"
+                        >
+                            HIGHER EXPOSURE
+                        </span>
+
+                    </div>
+
+
+                    <div class="route-values">
+
+                        <div class="route-value">
+                            DISTANCE
+                            <br>
+                            <strong id="routeBDistance">
+                                —
+                            </strong>
+                        </div>
+
+
+                        <div class="route-value">
+                            ETA
+                            <br>
+                            <strong id="routeBEta">
+                                —
+                            </strong>
+                        </div>
+
+
+                        <div class="route-value">
+                            RISK
+                            <br>
+                            <strong id="routeBRisk">
+                                —
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="small"
+                    id="routeText"
+                >
+                    Route recommendations appear
+                    after analysis.
+                </div>
+
+            </div>
+
+
+
+            <!-- RESOURCE ALLOCATION -->
+
+            <div class="resource-box">
+
+                <strong>
+                    AUTHORITY RESOURCE ALLOCATION
+                </strong>
+
+
+                <div class="small">
+                    Prototype estimates required
+                    response resources from the
+                    population and threat level.
+                </div>
+
+
+                <div class="resource-row resource-head">
+
+                    <span>
+                        RESOURCE
+                    </span>
+
+                    <span>
+                        NEED
+                    </span>
+
+                    <span>
+                        AVL
+                    </span>
+
+                </div>
+
+
+                <div class="resource-row">
+
+                    <span>
+                        Fire Engines
+                    </span>
+
+                    <span id="enginesNeed">
+                        —
+                    </span>
+
+                    <span id="enginesAvailable">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="resource-row">
+
+                    <span>
+                        Medical Units
+                    </span>
+
+                    <span id="medicalNeed">
+                        —
+                    </span>
+
+                    <span id="medicalAvailable">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="resource-row">
+
+                    <span>
+                        Evacuation Buses
+                    </span>
+
+                    <span id="busNeed">
+                        —
+                    </span>
+
+                    <span id="busAvailable">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="priority">
+
+                    <span class="priority-label">
+                        SECTOR PRIORITY
+                    </span>
+
+                    <span
+                        class="priority-value"
+                        id="sectorPriority"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </aside>
+
+
+    </div>
 
 </div>
 
 
+
+<!-- =========================================================
+     LEAFLET
+========================================================= -->
+
 <script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  crossorigin=""
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin=""
 ></script>
 
 
 <script>
 
-/* =======================================================
-   DEFAULT LOCATION
-======================================================= */
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
 
 const DEFAULT_LOCATION = {
 
-  lat: 28.6139,
+    lat: 28.6139,
 
-  lon: 77.2090
+    lon: 77.2090
 
 };
 
 
 const NASA_GIBS_WMS =
-  "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi";
+    "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi";
 
 
 let map;
@@ -830,1011 +1678,1437 @@ let selectedMarker = null;
 
 let spreadCircle = null;
 
-let routeLine = null;
+let routeLineA = null;
+
+let routeLineB = null;
 
 let selectedLat =
-  DEFAULT_LOCATION.lat;
+    DEFAULT_LOCATION.lat;
 
 let selectedLon =
-  DEFAULT_LOCATION.lon;
+    DEFAULT_LOCATION.lon;
+
+let latestData = null;
 
 
 
-/* =======================================================
+/* =========================================================
    HELPERS
-======================================================= */
+========================================================= */
 
-function el(id){
+function el(id) {
 
-  return document.getElementById(id);
+    return document.getElementById(id);
 
 }
 
 
 function setStatus(
-  message,
-  type = ""
-){
+    message,
+    type = ""
+) {
 
-  const status =
-    el("status");
+    el("status").textContent =
+        message;
 
-  status.textContent =
-    message;
-
-  status.className =
-    type
-      ? "status-" + type
-      : "";
+    el("status").className =
+        type
+        ? "status-" + type
+        : "";
 
 }
 
 
 
-/* =======================================================
-   NASA VIIRS FIRE LAYER
-======================================================= */
+/* =========================================================
+   NASA VIIRS THERMAL ANOMALY LAYER
+========================================================= */
 
-function addNASAFireLayer(){
+function addNASAFireLayer() {
 
-  const today =
-    new Date()
-      .toISOString()
-      .slice(0,10);
+    const today =
+        new Date()
+        .toISOString()
+        .slice(0, 10);
 
 
-  const fireLayer =
-    L.tileLayer.wms(
+    const layer =
+        L.tileLayer.wms(
 
-      NASA_GIBS_WMS,
+            NASA_GIBS_WMS,
 
-      {
+            {
 
-        layers:
-          "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
+                layers:
+                    "VIIRS_NOAA20_Thermal_Anomalies_375m_All",
 
-        format:
-          "image/png",
+                format:
+                    "image/png",
 
-        transparent:
-          true,
+                transparent:
+                    true,
 
-        version:
-          "1.3.0",
+                version:
+                    "1.3.0",
 
-        time:
-          today,
+                time:
+                    today,
 
-        opacity:
-          0.85,
+                opacity:
+                    0.82,
 
-        attribution:
-          "NASA GIBS / FIRMS"
+                attribution:
+                    "NASA GIBS / FIRMS"
 
-      }
+            }
 
-    );
-
-
-  fireLayer.addTo(map);
-
-}
-
-
-
-/* =======================================================
-   MAP INITIALIZATION
-======================================================= */
-
-function initMap(){
-
-  map =
-    L.map("map")
-      .setView(
-
-        [
-          DEFAULT_LOCATION.lat,
-          DEFAULT_LOCATION.lon
-        ],
-
-        6
-
-      );
-
-
-  L.tileLayer(
-
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-
-    {
-
-      maxZoom:
-        19,
-
-      attribution:
-        "&copy; OpenStreetMap contributors"
-
-    }
-
-  ).addTo(map);
-
-
-  /*
-    NASA satellite thermal anomaly layer
-  */
-
-  addNASAFireLayer();
-
-
-  /*
-    Clicking anywhere on the map
-  */
-
-  map.on(
-
-    "click",
-
-    function(event){
-
-      selectedLat =
-        event.latlng.lat;
-
-      selectedLon =
-        event.latlng.lng;
-
-
-      showSelectedLocation();
-
-
-      loadLocationData(
-
-        selectedLat,
-        selectedLon
-
-      );
-
-    }
-
-  );
-
-}
-
-
-
-/* =======================================================
-   SELECTED LOCATION MARKER
-======================================================= */
-
-function showSelectedLocation(){
-
-  if(selectedMarker){
-
-    map.removeLayer(
-      selectedMarker
-    );
-
-  }
-
-
-  selectedMarker =
-
-    L.marker(
-
-      [
-        selectedLat,
-        selectedLon
-      ]
-
-    ).addTo(map);
-
-
-  selectedMarker
-
-    .bindPopup(
-
-      "<b>SELECTED LOCATION</b><br><br>" +
-
-      "Latitude: " +
-      selectedLat.toFixed(4) +
-
-      "<br>" +
-
-      "Longitude: " +
-      selectedLon.toFixed(4)
-
-    )
-
-    .openPopup();
-
-}
-
-
-
-/* =======================================================
-   LIVE WEATHER + ELEVATION + HISTORY
-======================================================= */
-
-async function loadLocationData(
-
-  lat,
-  lon
-
-){
-
-  setStatus(
-    "Loading live weather, terrain and historical data..."
-  );
-
-
-  el("dataMode")
-    .textContent =
-    "LOADING";
-
-
-  const weatherURL =
-
-    "https://api.open-meteo.com/v1/forecast" +
-
-    "?latitude=" +
-    encodeURIComponent(lat) +
-
-    "&longitude=" +
-    encodeURIComponent(lon) +
-
-    "&current=" +
-
-    "temperature_2m," +
-
-    "relative_humidity_2m," +
-
-    "wind_speed_10m," +
-
-    "wind_direction_10m" +
-
-    "&past_days=7" +
-
-    "&forecast_days=1" +
-
-    "&hourly=temperature_2m" +
-
-    "&temperature_unit=celsius" +
-
-    "&wind_speed_unit=kmh" +
-
-    "&timezone=auto";
-
-
-  const elevationURL =
-
-    "https://api.open-meteo.com/v1/elevation" +
-
-    "?latitude=" +
-
-    encodeURIComponent(lat) +
-
-    "&longitude=" +
-
-    encodeURIComponent(lon);
-
-
-  try{
-
-    const responses =
-
-      await Promise.all([
-
-        fetch(weatherURL),
-
-        fetch(elevationURL)
-
-      ]);
-
-
-    if(
-
-      !responses[0].ok ||
-
-      !responses[1].ok
-
-    ){
-
-      throw new Error(
-        "API request failed"
-      );
-
-    }
-
-
-    const weather =
-      await responses[0].json();
-
-
-    const terrain =
-      await responses[1].json();
-
-
-    const current =
-      weather.current;
-
-
-    const temperature =
-      Number(
-        current.temperature_2m
-      );
-
-
-    const humidity =
-      Number(
-        current.relative_humidity_2m
-      );
-
-
-    const wind =
-      Number(
-        current.wind_speed_10m
-      );
-
-
-    const direction =
-      Number(
-        current.wind_direction_10m
-      );
-
-
-    const elevation =
-      Number(
-        terrain.elevation[0]
-      );
-
-
-    /*
-      Calculate historical average
-    */
-
-    const temperatures =
-
-      weather.hourly &&
-      weather.hourly.temperature_2m
-
-      ? weather.hourly.temperature_2m
-          .filter(
-            value =>
-              typeof value ===
-              "number"
-          )
-
-      : [];
-
-
-    let historicalAverage =
-      null;
-
-
-    if(temperatures.length){
-
-      historicalAverage =
-
-        temperatures.reduce(
-
-          (sum, value) =>
-            sum + value,
-
-          0
-
-        ) /
-
-        temperatures.length;
-
-    }
-
-
-    /*
-      Update UI
-    */
-
-    el("temperature")
-      .textContent =
-      temperature.toFixed(1) +
-      " °C";
-
-
-    el("wind")
-      .textContent =
-      wind.toFixed(1) +
-      " km/h";
-
-
-    el("windDirection")
-      .textContent =
-      direction +
-      "°";
-
-
-    el("humidity")
-      .textContent =
-      humidity +
-      " %";
-
-
-    el("elevation")
-      .textContent =
-      Math.round(elevation) +
-      " m";
-
-
-    el("tempAvg7")
-      .textContent =
-
-      historicalAverage === null
-
-        ? "—"
-
-        : historicalAverage.toFixed(1) +
-          " °C";
-
-
-    el("dataMode")
-      .textContent =
-      "LIVE";
-
-
-    setStatus(
-      "Live environmental data loaded.",
-      "ok"
-    );
-
-
-    /*
-      Update popup
-    */
-
-    if(selectedMarker){
-
-      selectedMarker
-
-        .bindPopup(
-
-          "<b>FIREGUARD LOCATION</b><br><br>" +
-
-          "Temperature: " +
-          temperature.toFixed(1) +
-          " °C<br>" +
-
-          "Wind: " +
-          wind.toFixed(1) +
-          " km/h<br>" +
-
-          "Wind direction: " +
-          direction +
-          "°<br>" +
-
-          "Humidity: " +
-          humidity +
-          "%<br>" +
-
-          "Elevation: " +
-          Math.round(elevation) +
-          " m"
-
-        )
-
-        .openPopup();
-
-    }
-
-
-    /*
-      Feed live weather into
-      our prototype risk engine
-    */
-
-    calculateRisk(
-
-      temperature,
-      wind,
-      humidity,
-      historicalAverage
-
-    );
-
-  }
-
-  catch(error){
-
-    console.error(error);
-
-
-    el("dataMode")
-      .textContent =
-      "ERROR";
-
-
-    setStatus(
-      "Unable to load live data. Check your internet connection.",
-      "error"
-    );
-
-  }
-
-}
-
-
-
-/* =======================================================
-   FIRE RISK MODEL
-======================================================= */
-
-function calculateRisk(
-
-  temperature,
-  wind,
-  humidity,
-  historicalAverage
-
-){
-
-  const dryness =
-
-    Number(
-      el("dryness").value
-    );
-
-
-  const terrainRisk =
-
-    Number(
-      el("terrainRisk").value
-    );
-
-
-  const satelliteSignal =
-
-    Number(
-      el("satSignal").value
-    );
-
-
-  let historicalFactor =
-    0;
-
-
-  if(
-
-    typeof historicalAverage ===
-    "number"
-
-  ){
-
-    historicalFactor =
-
-      Math.max(
-
-        0,
-
-        temperature -
-        historicalAverage
-
-      ) * 1.2;
-
-  }
-
-
-  /*
-    Simplified prototype risk model.
-  */
-
-  let score =
-
-    12 +
-
-    Math.max(
-      0,
-      temperature - 25
-    ) * 1.25 +
-
-    wind * 0.58 +
-
-    Math.max(
-      0,
-      45 - humidity
-    ) * 0.75 +
-
-    dryness * 12 +
-
-    terrainRisk * 9 +
-
-    satelliteSignal * 15 +
-
-    historicalFactor;
-
-
-  score =
-
-    Math.min(
-
-      99,
-
-      Math.max(
-
-        1,
-
-        Math.round(score)
-
-      )
-
-    );
-
-
-  /*
-    Risk UI
-  */
-
-  el("risk")
-    .textContent =
-    score +
-    " / 100";
-
-
-  el("riskBar")
-    .style.width =
-    score + "%";
-
-
-  /*
-    Spread estimate
-  */
-
-  const spread =
-
-    2.2 +
-    score / 16;
-
-
-  el("spread")
-    .textContent =
-    spread.toFixed(1) +
-    " km²";
-
-
-  /*
-    Population estimate
-  */
-
-  const population =
-
-    Math.round(
-
-      2500 +
-      score * 118
-
-    );
-
-
-  el("population")
-    .textContent =
-    population.toLocaleString();
-
-
-  /*
-    Draw projected fire area
-  */
-
-  if(spreadCircle){
-
-    map.removeLayer(
-      spreadCircle
-    );
-
-  }
-
-
-  spreadCircle =
-
-    L.circle(
-
-      [
-        selectedLat,
-        selectedLon
-      ],
-
-      {
-
-        radius:
-          1700 +
-          score * 52,
-
-        color:
-          "#ff8a3d",
-
-        fillColor:
-          "#ff8a3d",
-
-        fillOpacity:
-          0.11,
-
-        weight:
-          2
-
-      }
-
-    ).addTo(map);
-
-
-  /*
-    Alert
-  */
-
-  if(score >= 75){
-
-    el("alertTitle")
-      .textContent =
-      "HIGH RISK ALERT";
-
-
-    el("alertText")
-      .textContent =
-
-      "Current weather and satellite-signal conditions indicate elevated short-term wildfire risk. Evacuation preparation is recommended.";
-
-  }
-
-  else if(score >= 50){
-
-    el("alertTitle")
-      .textContent =
-      "MODERATE RISK ALERT";
-
-
-    el("alertText")
-      .textContent =
-
-      "Environmental conditions indicate moderate wildfire risk. Continue monitoring the projected trajectory.";
-
-  }
-
-  else{
-
-    el("alertTitle")
-      .textContent =
-      "LOWER RISK ALERT";
-
-
-    el("alertText")
-      .textContent =
-
-      "Current environmental conditions indicate lower short-term wildfire risk.";
-
-  }
-
-}
-
-
-
-/* =======================================================
-   ANALYZE BUTTON
-======================================================= */
-
-el("analyzeBtn")
-  .addEventListener(
-
-    "click",
-
-    function(){
-
-      loadLocationData(
-
-        selectedLat,
-        selectedLon
-
-      );
-
-    }
-
-  );
-
-
-
-/* =======================================================
-   EVACUATION ROUTE
-======================================================= */
-
-el("routeBtn")
-  .addEventListener(
-
-    "click",
-
-    function(){
-
-      if(routeLine){
-
-        map.removeLayer(
-          routeLine
         );
 
-      }
+
+    layer.addTo(map);
+
+}
 
 
-      /*
-        Prototype routing path.
 
-        A production implementation would use
-        a road-routing API plus fire perimeters,
-        road closures and safe-zone locations.
-      */
+/* =========================================================
+   MAP INITIALIZATION
+========================================================= */
 
-      const routePoints = [
+function initMap() {
 
-        [
-          selectedLat,
-          selectedLon
-        ],
+    map =
+        L.map("map")
+        .setView(
 
-        [
-          selectedLat + 0.018,
-          selectedLon + 0.025
-        ],
+            [
+                DEFAULT_LOCATION.lat,
+                DEFAULT_LOCATION.lon
+            ],
 
-        [
-          selectedLat + 0.038,
-          selectedLon + 0.052
-        ],
+            6
 
-        [
-          selectedLat + 0.060,
-          selectedLon + 0.080
-        ]
-
-      ];
+        );
 
 
-      routeLine =
+    L.tileLayer(
 
-        L.polyline(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 
-          routePoints,
+        {
 
-          {
+            maxZoom:
+                19,
 
-            color:
-              "#19d3ff",
+            attribution:
+                "&copy; OpenStreetMap contributors"
 
-            weight:
-              7,
+        }
 
-            opacity:
-              0.95
+    ).addTo(map);
 
-          }
+
+    addNASAFireLayer();
+
+
+    map.on(
+
+        "click",
+
+        function(event) {
+
+            selectedLat =
+                event.latlng.lat;
+
+            selectedLon =
+                event.latlng.lng;
+
+
+            updateSelectedMarker();
+
+
+            loadLiveData(
+
+                selectedLat,
+                selectedLon
+
+            );
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================================
+   MARK SELECTED LOCATION
+========================================================= */
+
+function updateSelectedMarker() {
+
+    if(selectedMarker) {
+
+        map.removeLayer(
+            selectedMarker
+        );
+
+    }
+
+
+    selectedMarker =
+        L.marker(
+
+            [
+                selectedLat,
+                selectedLon
+            ]
 
         ).addTo(map);
 
 
-      map.fitBounds(
+    selectedMarker
+        .bindPopup(
 
-        routeLine.getBounds(),
+            "<b>FIREGUARD LOCATION</b><br>" +
 
-        {
+            "Latitude: " +
+            selectedLat.toFixed(4) +
 
-          padding:
-            [30,30]
+            "<br>" +
+
+            "Longitude: " +
+            selectedLon.toFixed(4)
+
+        )
+        .openPopup();
+
+
+    el("coordinates").textContent =
+
+        "LAT " +
+        selectedLat.toFixed(4) +
+
+        " • LON " +
+        selectedLon.toFixed(4);
+
+}
+
+
+
+/* =========================================================
+   LIVE WEATHER + ELEVATION + HISTORY
+========================================================= */
+
+async function loadLiveData(
+    lat,
+    lon
+) {
+
+    setStatus(
+        "Loading live geospatial data..."
+    );
+
+
+    el("dataMode").textContent =
+        "LOADING";
+
+
+    const weatherURL =
+
+        "https://api.open-meteo.com/v1/forecast" +
+
+        "?latitude=" +
+        encodeURIComponent(lat) +
+
+        "&longitude=" +
+        encodeURIComponent(lon) +
+
+        "&current=" +
+
+        "temperature_2m," +
+        "relative_humidity_2m," +
+        "wind_speed_10m," +
+        "wind_direction_10m" +
+
+        "&past_days=7" +
+
+        "&forecast_days=1" +
+
+        "&hourly=temperature_2m" +
+
+        "&temperature_unit=celsius" +
+
+        "&wind_speed_unit=kmh" +
+
+        "&timezone=auto";
+
+
+    const elevationURL =
+
+        "https://api.open-meteo.com/v1/elevation" +
+
+        "?latitude=" +
+        encodeURIComponent(lat) +
+
+        "&longitude=" +
+        encodeURIComponent(lon);
+
+
+    try {
+
+        const responses =
+
+            await Promise.all([
+
+                fetch(weatherURL),
+
+                fetch(elevationURL)
+
+            ]);
+
+
+        if(
+            !responses[0].ok ||
+            !responses[1].ok
+        ) {
+
+            throw new Error(
+                "API request failed"
+            );
 
         }
 
-      );
+
+        const weather =
+            await responses[0].json();
 
 
-      el("routeText")
-        .textContent =
-
-        "Dynamic prototype route generated from the selected location toward a safer zone while avoiding the displayed projected fire area.";
-
-    }
-
-  );
+        const elevationData =
+            await responses[1].json();
 
 
+        const current =
+            weather.current;
 
-/* =======================================================
-   USE MY LOCATION
-======================================================= */
 
-el("locateBtn")
-  .addEventListener(
+        const temperature =
+            Number(
+                current.temperature_2m
+            );
 
-    "click",
 
-    function(){
+        const humidity =
+            Number(
+                current.relative_humidity_2m
+            );
 
-      if(!navigator.geolocation){
+
+        const wind =
+            Number(
+                current.wind_speed_10m
+            );
+
+
+        const direction =
+            Number(
+                current.wind_direction_10m
+            );
+
+
+        const elevation =
+            Number(
+                elevationData.elevation[0]
+            );
+
+
+        /* 7-day average */
+
+        const historicalValues =
+
+            weather.hourly &&
+            Array.isArray(
+                weather.hourly.temperature_2m
+            )
+
+            ? weather.hourly.temperature_2m
+                .filter(
+                    value =>
+                        typeof value ===
+                        "number"
+                )
+
+            : [];
+
+
+        let historicalAverage =
+            null;
+
+
+        if(
+            historicalValues.length > 0
+        ) {
+
+            historicalAverage =
+
+                historicalValues.reduce(
+
+                    (
+                        sum,
+                        value
+                    ) =>
+                        sum + value,
+
+                    0
+
+                )
+                /
+                historicalValues.length;
+
+        }
+
+
+        /* Update right panel */
+
+        el("temperature").textContent =
+            temperature.toFixed(1) +
+            " °C";
+
+
+        el("wind").textContent =
+            wind.toFixed(1) +
+            " km/h";
+
+
+        el("humidity").textContent =
+            humidity +
+            " %";
+
+
+        el("elevation").textContent =
+            Math.round(elevation) +
+            " m";
+
+
+        el("windDirection").textContent =
+            direction +
+            "°";
+
+
+        el("tempAvg7").textContent =
+
+            historicalAverage === null
+
+            ? "—"
+
+            : historicalAverage.toFixed(1) +
+              " °C";
+
+
+        el("dataMode").textContent =
+            "LIVE";
+
 
         setStatus(
+            "Live weather, terrain and historical data loaded.",
+            "ok"
+        );
 
-          "Geolocation is not supported by this browser.",
 
-          "error"
+        latestData = {
+
+            temperature,
+            humidity,
+            wind,
+            direction,
+            elevation,
+            historicalAverage
+
+        };
+
+
+        /* Popup */
+
+        if(selectedMarker) {
+
+            selectedMarker
+                .bindPopup(
+
+                    "<b>FIREGUARD LOCATION</b><br><br>" +
+
+                    "Temperature: " +
+                    temperature.toFixed(1) +
+                    " °C<br>" +
+
+                    "Wind: " +
+                    wind.toFixed(1) +
+                    " km/h<br>" +
+
+                    "Wind direction: " +
+                    direction +
+                    "°<br>" +
+
+                    "Humidity: " +
+                    humidity +
+                    "%<br>" +
+
+                    "Elevation: " +
+                    Math.round(elevation) +
+                    " m<br>" +
+
+                    "7-day average: " +
+                    (
+                        historicalAverage === null
+                        ? "—"
+                        : historicalAverage.toFixed(1) +
+                          " °C"
+                    )
+
+                )
+                .openPopup();
+
+        }
+
+
+        calculateRisk(
+
+            temperature,
+            wind,
+            humidity,
+            historicalAverage
 
         );
 
-        return;
+    }
 
-      }
+    catch(error) {
 
+        console.error(error);
 
-      setStatus(
-        "Requesting your location..."
-      );
-
-
-      navigator.geolocation.getCurrentPosition(
-
-        function(position){
-
-          selectedLat =
-            position.coords.latitude;
-
-          selectedLon =
-            position.coords.longitude;
+        el("dataMode").textContent =
+            "ERROR";
 
 
-          map.setView(
+        setStatus(
 
-            [
-              selectedLat,
-              selectedLon
-            ],
-
-            12
-
-          );
-
-
-          showSelectedLocation();
-
-
-          loadLocationData(
-
-            selectedLat,
-            selectedLon
-
-          );
-
-        },
-
-
-        function(){
-
-          setStatus(
-
-            "Location permission was denied or unavailable.",
+            "Unable to load live data. Check internet connection.",
 
             "error"
 
-          );
-
-        }
-
-      );
+        );
 
     }
 
-  );
+}
 
 
 
-/* =======================================================
-   START APPLICATION
-======================================================= */
+/* =========================================================
+   FIRE RISK ENGINE
+========================================================= */
+
+function calculateRisk(
+
+    temperature,
+    wind,
+    humidity,
+    historicalAverage
+
+) {
+
+    const dryness =
+        Number(
+            el("dryness").value
+        );
+
+
+    const terrainRisk =
+        Number(
+            el("terrainRisk").value
+        );
+
+
+    const satelliteSignal =
+        Number(
+            el("satSignal").value
+        );
+
+
+    const populationDensity =
+        Number(
+            el("populationDensity").value
+        );
+
+
+    /* Historical anomaly */
+
+    let anomaly = 0;
+
+
+    if(
+        typeof historicalAverage ===
+        "number"
+    ) {
+
+        anomaly =
+            Math.max(
+
+                0,
+
+                temperature -
+                historicalAverage
+
+            ) * 1.2;
+
+    }
+
+
+    /*
+      Prototype risk model.
+
+      This is intentionally simple and is
+      not a scientifically validated fire model.
+    */
+
+    let score =
+
+        10 +
+
+        Math.max(
+            0,
+            temperature - 25
+        ) * 1.25 +
+
+        wind * 0.58 +
+
+        Math.max(
+            0,
+            45 - humidity
+        ) * 0.75 +
+
+        dryness * 12 +
+
+        terrainRisk * 9 +
+
+        satelliteSignal * 15 +
+
+        anomaly;
+
+
+    score =
+        Math.min(
+            99,
+            Math.max(
+                1,
+                Math.round(score)
+            )
+        );
+
+
+    /* FIRE RISK */
+
+    el("risk").textContent =
+        score +
+        " / 100";
+
+
+    el("riskBar").style.width =
+        score +
+        "%";
+
+
+    /* PREDICTED SPREAD */
+
+    const spread =
+        2.0 +
+        score / 15;
+
+
+    el("spread").textContent =
+        spread.toFixed(1) +
+        " km²";
+
+
+    /* POPULATION AT RISK */
+
+    const population =
+        Math.round(
+
+            (
+                3000 +
+                score * 125
+            )
+            *
+            populationDensity
+
+        );
+
+
+    el("population").textContent =
+        population.toLocaleString();
+
+
+    /* RESPONSE TIME */
+
+    const responseMinutes =
+        Math.max(
+
+            6,
+
+            Math.round(
+                35 -
+                score * 0.25
+            )
+
+        );
+
+
+    el("responseTime").textContent =
+        responseMinutes +
+        " min";
+
+
+    /* SPREAD CIRCLE */
+
+    if(spreadCircle) {
+
+        map.removeLayer(
+            spreadCircle
+        );
+
+    }
+
+
+    spreadCircle =
+        L.circle(
+
+            [
+                selectedLat,
+                selectedLon
+            ],
+
+            {
+
+                radius:
+                    1600 +
+                    score * 55,
+
+                color:
+                    "#ff8a3d",
+
+                fillColor:
+                    "#ff8a3d",
+
+                fillOpacity:
+                    0.11,
+
+                weight:
+                    2
+
+            }
+
+        ).addTo(map);
+
+
+    /* EARLY WARNING */
+
+    updateEarlyWarning(
+        score,
+        responseMinutes
+    );
+
+
+    /* RESOURCES */
+
+    updateResources(
+        population,
+        score
+    );
+
+
+    /* ROUTES */
+
+    updateRouteOptions(
+        score
+    );
+
+}
+
+
+
+/* =========================================================
+   EARLY WARNING
+========================================================= */
+
+function updateEarlyWarning(
+
+    score,
+    responseMinutes
+
+) {
+
+    const headerAlert =
+        el("headerAlert");
+
+
+    const title =
+        el("alertTitle");
+
+
+    const text =
+        el("alertText");
+
+
+    const priority =
+        el("priority");
+
+
+    const warningWindow =
+        el("warningWindow");
+
+
+    if(score >= 80) {
+
+        headerAlert.style.display =
+            "block";
+
+
+        title.textContent =
+            "CRITICAL EARLY WARNING";
+
+
+        text.textContent =
+
+            "High-risk environmental conditions detected. The system recommends immediate preparation for evacuation and accelerated emergency response.";
+
+        priority.textContent =
+            "CRITICAL";
+
+        priority.className =
+            "priority-value critical";
+
+
+        warningWindow.textContent =
+            "15–30 min";
+
+        el("sectorPriority").textContent =
+            "SECTOR B";
+
+
+    }
+
+    else if(score >= 65) {
+
+        headerAlert.style.display =
+            "block";
+
+
+        title.textContent =
+            "HIGH EARLY WARNING";
+
+
+        text.textContent =
+
+            "Threat conditions are increasing. Authorities should prepare evacuation resources and monitor the predicted fire trajectory.";
+
+        priority.textContent =
+            "HIGH";
+
+        priority.className =
+            "priority-value high";
+
+
+        warningWindow.textContent =
+            "30–45 min";
+
+        el("sectorPriority").textContent =
+            "SECTOR C";
+
+
+    }
+
+    else {
+
+        headerAlert.style.display =
+            "none";
+
+
+        title.textContent =
+            "MONITORING";
+
+
+        text.textContent =
+
+            "Current conditions do not indicate a critical short-term threat. Continue monitoring live environmental signals.";
+
+        priority.textContent =
+            "NORMAL";
+
+        priority.className =
+            "priority-value normal";
+
+
+        warningWindow.textContent =
+            "45+ min";
+
+        el("sectorPriority").textContent =
+            "SECTOR D";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   RESOURCE ALLOCATION
+========================================================= */
+
+function updateResources(
+
+    population,
+    risk
+
+) {
+
+    /*
+      Simplified emergency planning ratios
+      for prototype demonstration.
+    */
+
+    const enginesNeed =
+        Math.max(
+            1,
+            Math.ceil(
+                population / 1600
+            )
+        );
+
+
+    const medicalNeed =
+        Math.max(
+            1,
+            Math.ceil(
+                population / 3000
+            )
+        );
+
+
+    const busesNeed =
+        Math.max(
+            1,
+            Math.ceil(
+                population / 450
+            )
+        );
+
+
+    /*
+      Simulated available stock.
+    */
+
+    const enginesAvailable =
+        Math.max(
+            1,
+            enginesNeed -
+            (
+                risk >= 80
+                ? 3
+                : risk >= 65
+                ? 2
+                : 1
+            )
+        );
+
+
+    const medicalAvailable =
+        Math.max(
+            1,
+            medicalNeed -
+            (
+                risk >= 80
+                ? 2
+                : 1
+            )
+        );
+
+
+    const busAvailable =
+        Math.max(
+            1,
+            busesNeed -
+            (
+                risk >= 80
+                ? 3
+                : risk >= 65
+                ? 2
+                : 1
+            )
+        );
+
+
+    el("enginesNeed").textContent =
+        enginesNeed;
+
+
+    el("enginesAvailable").textContent =
+        enginesAvailable;
+
+
+    el("medicalNeed").textContent =
+        medicalNeed;
+
+
+    el("medicalAvailable").textContent =
+        medicalAvailable;
+
+
+    el("busNeed").textContent =
+        busesNeed;
+
+
+    el("busAvailable").textContent =
+        busAvailable;
+
+}
+
+
+
+/* =========================================================
+   EVACUATION OPTIONS
+========================================================= */
+
+function updateRouteOptions(
+    score
+) {
+
+    /*
+      Route A:
+      Slightly longer, lower fire exposure.
+
+      Route B:
+      Shorter, but more exposure.
+
+      This is a prototype demonstration of
+      the optimization principle.
+    */
+
+    const routeADistance =
+        (
+            7.8 +
+            score / 55
+        ).toFixed(1);
+
+
+    const routeBDistance =
+        (
+            6.2 +
+            score / 80
+        ).toFixed(1);
+
+
+    const routeAEta =
+        Math.round(
+            11 +
+            score / 8
+        );
+
+
+    const routeBEta =
+        Math.round(
+            9 +
+            score / 10
+        );
+
+
+    const routeARisk =
+        Math.max(
+            10,
+            Math.round(
+                score * 0.32
+            )
+        );
+
+
+    const routeBRisk =
+        Math.min(
+            99,
+            Math.round(
+                score * 0.88
+            )
+        );
+
+
+    el("routeADistance")
+        .textContent =
+        routeADistance +
+        " km";
+
+
+    el("routeAEta")
+        .textContent =
+        routeAEta +
+        " min";
+
+
+    el("routeARisk")
+        .textContent =
+        routeARisk +
+        "/100";
+
+
+    el("routeBDistance")
+        .textContent =
+        routeBDistance +
+        " km";
+
+
+    el("routeBEta")
+        .textContent =
+        routeBEta +
+        " min";
+
+
+    el("routeBRisk")
+        .textContent =
+        routeBRisk +
+        "/100";
+
+
+    el("routeText").textContent =
+
+        "Route A is recommended because it has lower projected fire exposure, even though it is slightly longer.";
+
+
+    return {
+
+        routeADistance,
+        routeBDistance,
+        routeAEta,
+        routeBEta,
+        routeARisk,
+        routeBRisk
+
+    };
+
+}
+
+
+
+/* =========================================================
+   DRAW EVACUATION ROUTES
+========================================================= */
+
+function drawEvacuationRoutes() {
+
+    if(routeLineA) {
+
+        map.removeLayer(
+            routeLineA
+        );
+
+    }
+
+
+    if(routeLineB) {
+
+        map.removeLayer(
+            routeLineB
+        );
+
+    }
+
+
+    /*
+      ROUTE A:
+      Lower-risk route
+    */
+
+    const routeA = [
+
+        [
+            selectedLat,
+            selectedLon
+        ],
+
+        [
+            selectedLat + 0.015,
+            selectedLon + 0.018
+        ],
+
+        [
+            selectedLat + 0.034,
+            selectedLon + 0.045
+        ],
+
+        [
+            selectedLat + 0.060,
+            selectedLon + 0.080
+        ]
+
+    ];
+
+
+    /*
+      ROUTE B:
+      Shorter route through
+      higher projected exposure.
+    */
+
+    const routeB = [
+
+        [
+            selectedLat,
+            selectedLon
+        ],
+
+        [
+            selectedLat + 0.020,
+            selectedLon - 0.006
+        ],
+
+        [
+            selectedLat + 0.035,
+            selectedLon + 0.020
+        ],
+
+        [
+            selectedLat + 0.060,
+            selectedLon + 0.080
+        ]
+
+    ];
+
+
+    routeLineA =
+
+        L.polyline(
+
+            routeA,
+
+            {
+
+                color:
+                    "#19d3ff",
+
+                weight:
+                    7,
+
+                opacity:
+                    0.95
+
+            }
+
+        )
+
+        .addTo(map)
+
+        .bindPopup(
+            "ROUTE A — RECOMMENDED / LOWER FIRE EXPOSURE"
+        );
+
+
+    routeLineB =
+
+        L.polyline(
+
+            routeB,
+
+            {
+
+                color:
+                    "#ffd34e",
+
+                weight:
+                    4,
+
+                opacity:
+                    0.85,
+
+                dashArray:
+                    "7 7"
+
+            }
+
+        )
+
+        .addTo(map)
+
+        .bindPopup(
+            "ROUTE B — SHORTER / HIGHER FIRE EXPOSURE"
+        );
+
+
+    map.fitBounds(
+
+        routeLineA
+            .getBounds(),
+
+        {
+            padding:
+                [35,35]
+        }
+
+    );
+
+}
+
+
+
+/* =========================================================
+   ANALYZE BUTTON
+========================================================= */
+
+el("analyzeBtn")
+    .addEventListener(
+
+        "click",
+
+        function() {
+
+            loadLiveData(
+
+                selectedLat,
+                selectedLon
+
+            );
+
+        }
+
+    );
+
+
+
+/* =========================================================
+   ROUTE BUTTON
+========================================================= */
+
+el("routeBtn")
+    .addEventListener(
+
+        "click",
+
+        function() {
+
+            if(!latestData) {
+
+                setStatus(
+                    "Run analysis first.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            drawEvacuationRoutes();
+
+            el("routeText").textContent =
+
+                "Route A is recommended because it minimizes projected fire exposure rather than simply selecting the shortest path.";
+
+        }
+
+    );
+
+
+
+/* =========================================================
+   USE MY LOCATION
+========================================================= */
+
+el("locateBtn")
+    .addEventListener(
+
+        "click",
+
+        function() {
+
+            if(!navigator.geolocation) {
+
+                setStatus(
+                    "Geolocation is not supported.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            setStatus(
+                "Requesting your location..."
+            );
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function(position) {
+
+                    selectedLat =
+                        position.coords.latitude;
+
+
+                    selectedLon =
+                        position.coords.longitude;
+
+
+                    map.setView(
+
+                        [
+                            selectedLat,
+                            selectedLon
+                        ],
+
+                        12
+
+                    );
+
+
+                    updateSelectedMarker();
+
+
+                    loadLiveData(
+
+                        selectedLat,
+                        selectedLon
+
+                    );
+
+                },
+
+
+                function() {
+
+                    setStatus(
+                        "Location permission was denied or unavailable.",
+                        "error"
+                    );
+
+                }
+
+            );
+
+        }
+
+    );
+
+
+
+/* =========================================================
+   START
+========================================================= */
 
 initMap();
 
+updateSelectedMarker();
 
-showSelectedLocation();
+loadLiveData(
 
-
-loadLocationData(
-
-  selectedLat,
-  selectedLon
+    selectedLat,
+    selectedLon
 
 );
 
